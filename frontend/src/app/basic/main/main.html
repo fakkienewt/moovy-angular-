@@ -1,0 +1,224 @@
+<app-new-films></app-new-films>
+<div class="cute-tabs">
+    <div class="tabs-scroll">
+        <div class="left-tabs">
+            <div class="tab-item"
+                [class.active]="activeTab === 'films'"
+                (click)="setActiveTab('films')">Фильмы</div>
+            <div class="tab-item"
+                [class.active]="activeTab === 'series'"
+                (click)="setActiveTab('series')">Сериалы</div>
+            <div class="tab-item"
+                [class.active]="activeTab === 'dorama'"
+                (click)="setActiveTab('dorama')">Дорамы</div>
+            <div class="tab-item"
+                [class.active]="activeTab === 'anime'"
+                (click)="setActiveTab('anime')">Аниме</div>
+        </div>
+        <div class="right-tabs">
+            <div class="tab-item"
+                [class.active]="activeTab === 'sort'"
+                (click)="setActiveTab('sort')">Сортировать</div>
+        </div>
+    </div>
+</div>
+
+<section class="cute-vertical-movies"
+    *ngIf="activeTab === 'films'">
+    <div class="vertical-grid">
+        <ng-container *ngIf="loading_pagination">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                class="movie-card-vertical empty">
+                <div class="poster-wrapper">
+                    <div class="empty-poster"></div>
+                </div>
+                <div class="movie-info">
+                    <div class="empty-title"></div>
+                    <div class="empty-year"></div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!loading_pagination">
+            <ng-container *ngIf="loadingFilms">
+                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                    class="movie-card-vertical empty">
+                    <div class="poster-wrapper">
+                        <div class="empty-poster"></div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="empty-title"></div>
+                        <div class="empty-year"></div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!loadingFilms">
+                <div *ngFor="let film of films"
+                    class="movie-card-vertical">
+                    <div class="poster-wrapper"
+                        (click)="onClickPageFilm(film)">
+                        <img [src]="getPosterUrlFilm(film.poster)"
+                            class="poster-image">
+                        <div class="movie-rating">{{ film.rating }}</div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ film.title }}</h3>
+                        <p class="movie-year">{{ film.year }}</p>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
+</section>
+
+<section class="cute-vertical-movies"
+    *ngIf="activeTab === 'series'">
+    <div class="vertical-grid">
+        <ng-container *ngIf="loading_pagination">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                class="movie-card-vertical empty">
+                <div class="poster-wrapper">
+                    <div class="empty-poster"></div>
+                </div>
+                <div class="movie-info">
+                    <div class="empty-title"></div>
+                    <div class="empty-year"></div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!loading_pagination">
+            <ng-container *ngIf="loadingSeries">
+                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                    class="movie-card-vertical empty">
+                    <div class="poster-wrapper">
+                        <div class="empty-poster"></div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="empty-title"></div>
+                        <div class="empty-year"></div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!loadingSeries">
+                <div *ngFor="let series of seriesList"
+                    class="movie-card-vertical">
+                    <div class="poster-wrapper"
+                        (click)="onClickPageSeries(series)">
+                        <img [src]="getPosterUrlFilm(series.poster)"
+                            class="poster-image">
+                        <div class="movie-rating">{{ series.rating }}</div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ series.title }}</h3>
+                        <p class="movie-year">{{ series.year }}</p>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
+</section>
+
+<section class="cute-vertical-movies"
+    *ngIf="activeTab === 'dorama'">
+    <div class="vertical-grid">
+        <ng-container *ngIf="loading_pagination">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                class="movie-card-vertical empty">
+                <div class="poster-wrapper">
+                    <div class="empty-poster"></div>
+                </div>
+                <div class="movie-info">
+                    <div class="empty-title"></div>
+                    <div class="empty-year"></div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!loading_pagination">
+            <ng-container *ngIf="loadingDorama">
+                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                    class="movie-card-vertical empty">
+                    <div class="poster-wrapper">
+                        <div class="empty-poster"></div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="empty-title"></div>
+                        <div class="empty-year"></div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!loadingDorama">
+                <div *ngFor="let d of dorama"
+                    class="movie-card-vertical">
+                    <div class="poster-wrapper"
+                        (click)="onClickPageDorama(d)">
+                        <img [src]="getPosterUrlFilm(d.poster)"
+                            class="poster-image">
+                        <div class="movie-rating">{{ d.rating }}</div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ d.title }}</h3>
+                        <p class="movie-year">{{ d.year }}</p>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
+</section>
+
+<section class="cute-vertical-movies"
+    *ngIf="activeTab === 'anime'">
+    <div class="vertical-grid">
+        <ng-container *ngIf="loading_pagination">
+            <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                class="movie-card-vertical empty">
+                <div class="poster-wrapper">
+                    <div class="empty-poster"></div>
+                </div>
+                <div class="movie-info">
+                    <div class="empty-title"></div>
+                    <div class="empty-year"></div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!loading_pagination">
+            <ng-container *ngIf="loadingAnime">
+                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                    class="movie-card-vertical empty">
+                    <div class="poster-wrapper">
+                        <div class="empty-poster"></div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="empty-title"></div>
+                        <div class="empty-year"></div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!loadingAnime">
+                <div *ngFor="let a of anime"
+                    class="movie-card-vertical">
+                    <div class="poster-wrapper"
+                        (click)="onClickPageAnime(a)">
+                        <img [src]="getPosterUrlFilm(a.poster)"
+                            class="poster-image">
+                        <div class="movie-rating">{{ a.rating }}</div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ a.title }}</h3>
+                        <p class="movie-year">{{ a.year }}</p>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
+</section>

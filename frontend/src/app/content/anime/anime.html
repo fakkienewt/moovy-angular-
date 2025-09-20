@@ -1,0 +1,210 @@
+<div class="soft-anime-page">
+    <div class="anime-soft-card">
+        <div class="anime-soft-top">
+            <div class="soft-poster-wrapper">
+                <img [src]="getPosterUrl(anime?.poster)"
+                    class="soft-poster">
+                <div class="soft-movie-rating">{{ anime?.rating }}</div>
+            </div>
+
+            <div class="soft-main-info">
+                <div class="soft-title-container">
+                    <h1 class="soft-title"
+                        id="anime-title">{{ anime?.title }}</h1>
+                </div>
+
+                <div class="soft-details-grid">
+                    <div class="soft-detail-item">
+                        <span class="soft-detail-label">Режиссёр:</span>
+                        <span class="soft-detail-value"
+                            id="anime-status">{{ anime?.director }}</span>
+                    </div>
+                    <div class="soft-detail-item">
+                        <span class="soft-detail-label">Год:</span>
+                        <span class="soft-detail-value"
+                            id="anime-season">{{ anime?.year }}</span>
+                    </div>
+                    <div class="soft-detail-item">
+                        <span class="soft-detail-label">Жанры:</span>
+                        <span class="soft-detail-value"
+                            id="anime-genres">{{ anime?.genres?.join(', ') }}</span>
+                    </div>
+                    <div class="soft-detail-item">
+                        <span class="soft-detail-label">Серий:</span>
+                        <span class="soft-detail-value"
+                            id="anime-episodes">{{ anime?.episodes }}</span>
+                    </div>
+                    <div class="soft-detail-item">
+                        <span class="soft-detail-label">Время:</span>
+                        <span class="soft-detail-value"
+                            id="anime-time">{{ anime?.time }}</span>
+                    </div>
+                    <div class="soft-detail-item">
+                        <span class="soft-detail-label">Статус:</span>
+                        <span class="soft-detail-value"
+                            id="anime-rating">{{ anime?.status }}</span>
+                    </div>
+                </div>
+
+                <div class="soft-action-buttons">
+                    <button class="soft-watch-btn">
+                        <svg width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none">
+                            <path d="M10 8L16 12L10 16V8Z"
+                                fill="white"
+                                stroke="white"
+                                stroke-width="2"
+                                stroke-linejoin="round" />
+                        </svg>
+                        Смотреть онлайн
+                    </button>
+
+                    <button class="soft-fav-btn">
+                        <svg width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none">
+                            <path
+                                d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
+                                fill="none"
+                                stroke="#ff85a2"
+                                stroke-width="1.5" />
+                        </svg>
+                    </button>
+
+                    <button class="soft-later-btn">
+                        <svg width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none">
+                            <path
+                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                stroke="#ff85a2"
+                                stroke-width="1.5" />
+                            <path d="M12 6V12L16 14"
+                                stroke="#ff85a2"
+                                stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="soft-description-section">
+            <h3 class="soft-section-title">Описание</h3>
+            <p class="soft-description-text"
+                id="anime-description">
+                {{ anime?.description }}
+            </p>
+        </div>
+    </div>
+
+    <div class="soft-player-section">
+        <div class="soft-player-header">
+            <h3 class="soft-section-title">Смотреть онлайн</h3>
+            <div class="soft-player-controls">
+                <div class="soft-quality-selector">
+                    <span>Качество:</span>
+                    <select>
+                        <option>Full HD</option>
+                        <option>HD</option>
+                        <option>SD</option>
+                    </select>
+                </div>
+                <div class="soft-audio-selector">
+                    <span>Озвучка:</span>
+                    <select>
+                        <option>Оригинал</option>
+                        <option>Русская</option>
+                        <option>Дублированная</option>
+                    </select>
+                </div>
+                <div class="soft-subtitle-selector">
+                    <span>Субтитры:</span>
+                    <select>
+                        <option>Русские</option>
+                        <option>Английские</option>
+                        <option>Отсутствуют</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="soft-video-player">
+            <div class="soft-video-placeholder">
+                <div class="soft-play-icon">
+                    <svg width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="none">
+                        <path
+                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                            stroke="#FFD1DC"
+                            stroke-width="1.5" />
+                        <path d="M10 8L16 12L10 16V8Z"
+                            fill="#FFE4E9"
+                            stroke="#FFB6C1"
+                            stroke-width="1.5"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <p class="soft-placeholder-text">Нажмите для начала просмотра</p>
+            </div>
+        </div>
+
+        <div class="soft-similar-section">
+            <h3 class="soft-section-title">Похожие аниме</h3>
+            <div class="soft-similar-grid">
+                <div class="soft-similar-item">
+                    <div class="soft-similar-poster"></div>
+                    <div class="soft-similar-title">Атака титанов</div>
+                    <div class="soft-similar-rating">9.2</div>
+                </div>
+                <div class="soft-similar-item">
+                    <div class="soft-similar-poster"></div>
+                    <div class="soft-similar-title">Наруто</div>
+                    <div class="soft-similar-rating">8.3</div>
+                </div>
+                <div class="soft-similar-item">
+                    <div class="soft-similar-poster"></div>
+                    <div class="soft-similar-title">Ван-Пис</div>
+                    <div class="soft-similar-rating">8.7</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="soft-comments-section">
+        <h3 class="soft-section-title">Комментарии</h3>
+        <div class="soft-comments-container">
+            <div class="soft-comment-form">
+                <textarea placeholder="Оставьте ваш комментарий..."
+                    class="soft-comment-input"></textarea>
+                <button class="soft-comment-submit">Отправить</button>
+            </div>
+            <div class="soft-comments-list">
+                <div class="soft-comment">
+                    <div class="soft-comment-avatar"></div>
+                    <div class="soft-comment-content">
+                        <div class="soft-comment-author">Алексей Петров</div>
+                        <div class="soft-comment-text">Отличное аниме! Смотрел уже три раза, и каждый раз нахожу что-то
+                            новое.</div>
+                        <div class="soft-comment-meta">2 часа назад • Оценка: 9/10</div>
+                    </div>
+                </div>
+                <div class="soft-comment">
+                    <div class="soft-comment-avatar"></div>
+                    <div class="soft-comment-content">
+                        <div class="soft-comment-author">Мария Иванова</div>
+                        <div class="soft-comment-text">Визуальные эффекты просто потрясающие, но сюжет немного
+                            предсказуем.</div>
+                        <div class="soft-comment-meta">5 часов назад • Оценка: 7/10</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

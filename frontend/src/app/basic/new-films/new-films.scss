@@ -1,0 +1,127 @@
+.new-label {
+    margin: 30px 0 0 0;
+    background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 20px 20px 0 0;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    width: 1030px;
+    box-shadow: 0 -4px 15px rgba(255, 182, 193, 0.3);
+    text-shadow: 2px 2px 0px #ff9dbb,
+        4px 4px 0px rgba(255, 157, 187, 0.3),
+        6px 6px 0px rgba(255, 157, 187, 0.2);
+}
+
+.cute-vertical-movies {
+    width: 1045px;
+    background: linear-gradient(135deg, #fffafb 0%, #fff5f7 100%);
+    padding: 20px;
+    border-radius: 0 0 25px 25px;
+    border: 2px solid #ffd1dc;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px 0px;
+}
+
+.loading-container,
+.content-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+
+.movie-card-vertical {
+    text-align: center;
+    transition: transform 0.3s ease;
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+    border: 2px solid #ffd1dc;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.movie-card-vertical:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(255, 182, 193, 0.4);
+}
+
+.poster-wrapper {
+    position: relative;
+    width: 140px;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 0 auto 12px;
+    border: 2px solid #ffd1dc;
+    cursor: pointer;
+}
+
+.poster-image {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.poster-wrapper:hover .poster-image {
+    transform: scale(1.05);
+}
+
+.movie-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.movie-title {
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff85a2;
+    text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.2);
+}
+
+.movie-year {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #ff9dbb;
+    margin: 0;
+    font-weight: 500;
+}
+
+.empty-poster {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
+    border-radius: 15px;
+}
+
+.empty-year {
+    height: 16px;
+    width: 60%;
+    background: #ffd1dc;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

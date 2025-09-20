@@ -1,0 +1,34 @@
+<div class="new-label">НОВИНКИ</div>
+
+<section class="cute-vertical-movies">
+    <div class="vertical-grid">
+        <div class="loading-container"
+            *ngIf="loading$">
+            <div *ngFor="let i of [1,2,3,4]"
+                class="movie-card-vertical empty">
+                <div class="poster-wrapper">
+                    <div class="empty-poster"></div>
+                </div>
+                <div class="movie-info">
+                    <div class="empty-year"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container"
+            *ngIf="!loading$">
+            <div *ngFor="let movie of moviesList$ | async"
+                class="movie-card-vertical">
+                <div class="poster-wrapper"
+                    (click)="onClickPage(movie)">
+                    <img [src]="getPosterUrl(movie.poster)"
+                        class="poster-image">
+                    <div class="movie-rating">{{ movie.rating }}</div>
+                </div>
+                <div class="movie-info">
+                    <p class="movie-year">{{ movie.year }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

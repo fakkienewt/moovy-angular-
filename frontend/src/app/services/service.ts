@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Film } from '../models.ts/film.model';
 import { Observable } from 'rxjs';
-
+import { Film } from '../models.ts/film.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +11,6 @@ export class Service {
 
   private baseUrl = 'http://localhost:3500/api';
   public current_page: number = 1;
-  public loading: boolean = false;
 
   backPage(): void {
     if (this.current_page === 1) {
@@ -31,9 +29,8 @@ export class Service {
   }
 
   setPage(page: number): void {
-    if (page >= 1 && this.loading === false) {
+    if (page >= 1) {
       this.current_page = page;
-      this.loading = true;
     }
   }
 

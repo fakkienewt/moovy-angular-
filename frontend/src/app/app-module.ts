@@ -16,8 +16,7 @@ import { Service } from './services/service';
 import { NewFilms } from './basic/new-films/new-films';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { SortService } from './services/sort-service';
-import { Sort } from './content/sort/sort';
+import { Filters } from './content/filters/filters';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,7 @@ import { Sort } from './content/sort/sort';
     MainPagination,
     NewFilmsPagination,
     NewFilms,
-    Sort,
+    Filters,
   ],
   imports: [
     CommonModule,
@@ -43,7 +42,6 @@ import { Sort } from './content/sort/sort';
     provideBrowserGlobalErrorListeners(),
     NewFilmsService,
     Service,
-    SortService
   ],
   bootstrap: [App]
 })

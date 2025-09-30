@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Film } from '../../models.ts/film.model';
 import { Router } from '@angular/router';
 import { Service } from '../../services/service';
-import { SortService } from '../../services/sort-service';
 
 @Component({
   selector: 'app-main',
@@ -26,12 +25,10 @@ export class Main implements OnInit {
   loadingSeries = true;
   loadingDorama = true;
   loadingAnime = true;
-  loadingSort = true;
 
   constructor(
     private MainService: Service,
-    public router: Router,
-    public sortService: SortService
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -62,9 +59,6 @@ export class Main implements OnInit {
         this.loadAnime();
         this.loadAnimeWithPagination();
         break;
-      // case 'sort':
-      //   this.loadSort();
-      //   break;
     }
   }
 
@@ -241,3 +235,4 @@ export class Main implements OnInit {
     });
   }
 }
+

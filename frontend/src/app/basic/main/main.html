@@ -17,8 +17,8 @@
         </div>
         <div class="right-tabs">
             <div class="tab-item"
-                [class.active]="activeTab === 'sort'"
-                (click)="setActiveTab('sort')">Сортировать</div>
+                [class.active]="activeTab === 'filters'"
+                (click)="setActiveTab('filters')">Фильтровать</div>
         </div>
     </div>
 </div>
@@ -26,7 +26,7 @@
 <section class="cute-vertical-movies"
     *ngIf="activeTab === 'films'">
     <div class="vertical-grid">
-        <ng-container *ngIf="loading_pagination">
+        <ng-container *ngIf="loading_pagination || loadingFilms">
             <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
                 class="movie-card-vertical empty">
                 <div class="poster-wrapper">
@@ -39,35 +39,20 @@
             </div>
         </ng-container>
 
-        <ng-container *ngIf="!loading_pagination">
-            <ng-container *ngIf="loadingFilms">
-                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
-                    class="movie-card-vertical empty">
-                    <div class="poster-wrapper">
-                        <div class="empty-poster"></div>
-                    </div>
-                    <div class="movie-info">
-                        <div class="empty-title"></div>
-                        <div class="empty-year"></div>
-                    </div>
+        <ng-container *ngIf="!loading_pagination && !loadingFilms">
+            <div *ngFor="let film of films"
+                class="movie-card-vertical">
+                <div class="poster-wrapper"
+                    (click)="onClickPageFilm(film)">
+                    <img [src]="getPosterUrlFilm(film.poster)"
+                        class="poster-image">
+                    <div class="movie-rating">{{ film.rating }}</div>
                 </div>
-            </ng-container>
-
-            <ng-container *ngIf="!loadingFilms">
-                <div *ngFor="let film of films"
-                    class="movie-card-vertical">
-                    <div class="poster-wrapper"
-                        (click)="onClickPageFilm(film)">
-                        <img [src]="getPosterUrlFilm(film.poster)"
-                            class="poster-image">
-                        <div class="movie-rating">{{ film.rating }}</div>
-                    </div>
-                    <div class="movie-info">
-                        <h3 class="movie-title">{{ film.title }}</h3>
-                        <p class="movie-year">{{ film.year }}</p>
-                    </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">{{ film.title }}</h3>
+                    <p class="movie-year">{{ film.year }}</p>
                 </div>
-            </ng-container>
+            </div>
         </ng-container>
     </div>
     <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
@@ -221,4 +206,9 @@
         </ng-container>
     </div>
     <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
+</section>
+
+<section class="cute-vertical-movies"
+    *ngIf="activeTab === 'filters'">
+    <app-filters></app-filters>
 </section>

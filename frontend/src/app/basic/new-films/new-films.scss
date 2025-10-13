@@ -1,5 +1,56 @@
+.new-films-container {
+    position: relative;
+}
+
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-arrow.left-arrow {
+    left: -20px;
+}
+
+.carousel-arrow.right-arrow {
+    right: -20px;
+}
+
+.arrow-circle {
+    width: 55px;
+    height: 70px;
+    background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
+    border-radius: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+    transition: all 0.3s ease;
+}
+
+.arrow-circle:hover {
+    background: linear-gradient(135deg, #ff9dbb 0%, #ff85a2 100%);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.arrow-circle:active {
+    transform: scale(0.95);
+}
+
 .new-label {
-    margin: 30px 0 0 0;
+    margin: 20px 0 0 0;
     background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
     color: white;
     padding: 12px 30px;

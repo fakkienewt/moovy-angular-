@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Film } from '../models.ts/film.model';
+import { Filter } from '../models.ts/filter.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +12,7 @@ export class Service {
 
   private baseUrl = 'http://localhost:3500/api';
   public current_page: number = 1;
+  public filter_year: number;
 
   backPage(): void {
     if (this.current_page === 1) {
@@ -51,6 +53,14 @@ export class Service {
   }
 
   getAnime(): Observable<Film[]> {
-    return this.http.get<Film[]>(`${this.baseUrl}/anime?page=${this.current_page}`);
+    if (this.filter_year) {
+      return this.http.get<Film[]>(`${this.baseUrl}/anime?page=${this.current_page}&year=${this.filter_year}`);
+    } else {
+      return this.http.get<Film[]>(`${this.baseUrl}/anime?page=${this.current_page}`);
+    }
+  }
+
+  getFilterData(): Observable<Filter> {
+    return this.http.get<Filter>(`${this.baseUrl}/filters`);
   }
 }

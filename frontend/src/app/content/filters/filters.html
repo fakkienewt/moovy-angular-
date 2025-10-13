@@ -1,0 +1,90 @@
+<div class="filters-container">
+    <div class="filters-main-card">
+        <div class="filters-content">
+            <div class="filter-column">
+                <div class="filter-section">
+                    <legend class="filter-legend">Тип:</legend>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio"
+                                name="type"
+                                value="film"
+                                [(ngModel)]="selectedType"
+                                class="radio-input">
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">Фильмы</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio"
+                                name="type"
+                                value="serie"
+                                [(ngModel)]="selectedType"
+                                class="radio-input">
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">Сериалы</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio"
+                                name="type"
+                                value="anime"
+                                [(ngModel)]="selectedType"
+                                class="radio-input">
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">Аниме</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio"
+                                name="type"
+                                value="dorama"
+                                [(ngModel)]="selectedType"
+                                class="radio-input">
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">Дорамы</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-column">
+                <div class="selects-section">
+                    <div class="select-group">
+                        <label class="select-label">Жанры:</label>
+                        <select class="cute-select"
+                            [(ngModel)]="selectedGenre">
+                            <option value="">Все жанры</option>
+                            <option [value]="genre"
+                                *ngFor="let genre of filter?.genres?.sort()">{{genre}}</option>
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label class="select-label">Годы:</label>
+                        <select class="cute-select"
+                            [(ngModel)]="selectedYear">
+                            <option value="">Все годы</option>
+                            <option [value]="year"
+                                *ngFor="let year of filter?.years">{{year}}</option>
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label class="select-label">Страны</label>
+                        <select class="cute-select"
+                            [(ngModel)]="selectedCountry">
+                            <option value="">Все страны:</option>
+                            <option [value]="country"
+                                *ngFor="let country of filter?.countries?.sort()">{{country}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-actions">
+            <button class="btn-apply"
+                (click)="onClickCheck()">Применить</button>
+            <button class="btn-reset"
+                (click)="onReset()">Сбросить</button>
+        </div>
+    </div>
+</div>

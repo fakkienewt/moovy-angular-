@@ -3,12 +3,8 @@ const axios = require('axios');
 
 const axiosConfig = {
     headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Referer': 'https://w140.zona.plus/',
     }
 };
 
@@ -127,11 +123,10 @@ async function parseAnime(page = 1) {
                 time: time,
                 status: status,
                 year: year,
-                director: director
+                director: director,
             });
         }
 
-        console.log(`Спаршено ${allAnime.length} аниме со страницы ${currentPage}`);
         return allAnime;
 
     } catch (error) {

@@ -1,4 +1,4 @@
-let mysql = require('mysql2');
+const mysql = require('mysql2');
 
 const options = {
     host: 'localhost',
@@ -10,19 +10,16 @@ const options = {
 function initDatabase() {
     let connection = mysql.createConnection(options);
 
-    let movie = `
-        CREATE TABLE IF NOT EXISTS movie(
+    let movies = `
+        CREATE TABLE IF NOT EXISTS movies(
         id INT PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
         poster VARCHAR(500),
-        url VARCHAR(500),
         rating DECIMAL(3, 1) DEFAULT 0, 
         year INT,              
         description TEXT, 
         genres TEXT,
         countries TEXT,
-        time VARCHAR(100),
-        premiere VARCHAR(100),
         director TEXT,
         actors TEXT,
         author TEXT
@@ -33,14 +30,11 @@ function initDatabase() {
         id INT PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
         poster VARCHAR(500),
-        url VARCHAR(500),
         rating DECIMAL(3, 1) DEFAULT 0, 
         year INT,              
         description TEXT, 
         genres TEXT,
         countries TEXT,
-        time VARCHAR(100),
-        premiere VARCHAR(100),
         director TEXT,
         actors TEXT,
         author TEXT
@@ -51,7 +45,6 @@ function initDatabase() {
         id INT PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
         poster VARCHAR(500),
-        url VARCHAR(500),
         rating DECIMAL(3, 1) DEFAULT 0, 
         year INT,              
         description TEXT, 
@@ -68,7 +61,6 @@ function initDatabase() {
         id INT PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
         poster VARCHAR(500),
-        url VARCHAR(500),
         rating DECIMAL(3, 1) DEFAULT 0, 
         year VARCHAR(100),              
         description TEXT, 
@@ -84,7 +76,6 @@ function initDatabase() {
         id INT PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
         poster VARCHAR(500),
-        url VARCHAR(500),
         rating VARCHAR(100), 
         year VARCHAR(100),              
         description TEXT, 
@@ -92,13 +83,12 @@ function initDatabase() {
         genres TEXT,
         countries TEXT,
         status TEXT,
-        time VARCHAR(100),
         actors TEXT
     )`;
 
-    connection.query(movie, function (err, results) {
+    connection.query(movies, function (err, results) {
         if (err) console.log(err);
-        else console.log("таблица movie создана");
+        else console.log("таблица movies создана");
     });
 
     connection.query(films, function (err, results) {
@@ -129,18 +119,16 @@ async function saveAnime(animeData) {
 
     for (let anime of animeData) {
         const query = `
-        INSERT INTO anime(title, poster, url, rating, year, description, time, episodes, director, genres, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO anime(title, poster, rating, year, description, episodes, director, genres, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
             anime.title,
             anime.poster,
-            anime.url,
             anime.rating,
             anime.year,
             anime.description,
-            anime.time,
             anime.episodes,
             Array.isArray(anime.director) ? anime.director.join(', ') : anime.director,
             Array.isArray(anime.genres) ? anime.genres.join(', ') : anime.genres,
@@ -159,42 +147,41 @@ async function saveFilm(filmData) {
     let connection = mysql.createConnection(options);
     for (let film of filmData) {
         const query = `
-         INSERT INTO films(title, poster, url, rating, year, description, genres, author, actors, countries, director)
-         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         INSERT INTO films(title, poster, rating, year, description, genres, author, actors, countries, director)
+         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             film.title,
             film.poster,
-            film.url,
             film.rating,
             film.year,
             film.description,
             Array.isArray(film.genres) ? film.genres.join(', ') : film.genres,
-            Array.isArray(film.director) ? film.director.join(', ') : film.director,
             Array.isArray(film.author) ? film.author.join(', ') : film.author,
             Array.isArray(film.actors) ? film.actors.join(', ') : film.actors,
             Array.isArray(film.countries) ? film.countries.join(', ') : film.countries,
+            Array.isArray(film.director) ? film.director.join(', ') : film.director,
         ];
 
         connection.execute(query, values, function (error, results) {
-            if (error) console.log(error);
+            if (error) {
+                console.log('Ошибка при сохранении фильма:', error);
+            }
         });
     }
     connection.end();
     console.log(`добавлено ${filmData.length} фильмов`);
 }
-
 async function saveSerie(serieData) {
     let connection = mysql.createConnection(options);
     for (let serie of serieData) {
         const query = `
-        INSERT INTO series(title, poster, url, rating, year, description, genres, author, countries, director, episodes, actors)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO series(title, poster, rating, year, description, genres, author, countries, director, episodes, actors)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             serie.title,
             serie.poster,
-            serie.url,
             serie.rating || 0,
             serie.year,
             serie.description,
@@ -217,13 +204,12 @@ async function saveDorama(doramaData) {
     let connection = mysql.createConnection(options);
     for (let dorama of doramaData) {
         const query = `
-        INSERT INTO dorama(title, poster, url, rating, year, description, genres, countries, episodes, actors, status)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO dorama(title, poster, rating, year, description, genres, countries, episodes, actors, status)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             dorama.title,
             dorama.poster,
-            dorama.url,
             dorama.rating,
             dorama.year,
             dorama.description,
@@ -245,13 +231,12 @@ async function saveMovie(movieData) {
     let connection = mysql.createConnection(options);
     for (let movie of movieData) {
         const query = `
-         INSERT INTO movie(title, poster, url, rating, year, description, genres, author, actors, countries, director)
-         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO movies(title, poster, rating, year, description, genres, author, actors, countries, director)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             movie.title,
             movie.poster,
-            movie.url,
             movie.rating,
             movie.year,
             movie.description,
@@ -281,3 +266,4 @@ module.exports = {
     saveAnime,
     saveFilm
 };
+

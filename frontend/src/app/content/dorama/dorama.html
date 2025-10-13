@@ -1,119 +1,123 @@
-<div class="soft-movie-page">
-    <div class="movie-soft-card">
-        <div class="movie-soft-top">
-            <div class="soft-poster-wrapper">
-                <img [src]="getPosterUrl(dorama?.poster)"
-                    class="soft-poster">
-                <div class="soft-movie-rating">{{ dorama?.rating }}</div>
-            </div>
+<div class="movie-page">
+    <div class="movie-container">
+        <div class="movie-main-card">
+            <div class="movie-header">
+                <div class="poster-section">
+                    <div class="poster-wrapper">
+                        <img [src]="getPosterUrl(dorama?.poster)"
+                            class="movie-poster">
+                        <div class="movie-rating">{{ dorama?.rating }}</div>
+                    </div>
 
-            <div class="soft-main-info">
-                <div class="soft-title-container">
-                    <h1 class="soft-title">{{ dorama?.title }}</h1>
+                    <div class="action-buttons">
+                        <button class="btn-watch">
+                            <svg width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none">
+                                <path d="M10 8L16 12L10 16V8Z"
+                                    fill="white" />
+                            </svg>
+                            Смотреть онлайн
+                        </button>
+                        <button class="btn-favorite">
+                            <svg width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none">
+                                <path
+                                    d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5" />
+                            </svg>
+                            В избранное
+                        </button>
+                        <button class="btn-later">
+                            <svg width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none">
+                                <path
+                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <path d="M12 6V12L16 14"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Посмотреть позже
+                        </button>
+                    </div>
                 </div>
 
-                <div class="soft-details-grid">
-                    <div class="soft-detail-item">
-                        <span class="soft-detail-label">Год:</span>
-                        <span class="soft-detail-value">{{ dorama?.year }}</span>
-                    </div>
-                    <div class="soft-detail-item">
-                        <span class="soft-detail-label">Страна:</span>
-                        <span class="soft-detail-value">{{ dorama?.countries }}</span>
-                    </div>
-                    <div class="soft-detail-item">
-                        <span class="soft-detail-label">Актеры:</span>
-                        <span class="soft-detail-value">{{ dorama?.actors }}</span>
-                    </div>
-                    <div class="soft-detail-item">
-                        <span class="soft-detail-label">Статус:</span>
-                        <span class="soft-detail-value">{{ dorama?.status ?? 0 }}</span>
-                    </div>
-                    <div class="soft-detail-item">
-                        <span class="soft-detail-label">Жанр:</span>
-                        <span class="soft-detail-value">{{ dorama?.genres }}</span>
-                    </div>
-                    <div class="soft-detail-item">
-                        <span class="soft-detail-label">Серий:</span>
-                        <span class="soft-detail-value">{{ dorama?.episodes }}</span>
-                    </div>
-                </div>
+                <div class="movie-info">
+                    <h1 class="movie-title">{{ dorama?.title }}</h1>
 
-                <div class="soft-action-buttons">
-                    <button class="soft-watch-btn">
-                        <svg width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <path d="M10 8L16 12L10 16V8Z"
-                                fill="white"
-                                stroke="white"
-                                stroke-width="2"
-                                stroke-linejoin="round" />
-                        </svg>
-                        Смотреть онлайн
-                    </button>
+                    <div class="movie-details-enhanced">
+                        <div class="details-column">
+                            <div class="detail-card">
+                                <div class="detail-label">Год:</div>
+                                <div class="detail-value">{{ dorama?.year }}</div>
+                            </div>
+                            <div class="detail-card">
+                                <div class="detail-label">Страна:</div>
+                                <div class="detail-value">{{ dorama?.countries }}</div>
+                            </div>
+                            <div class="detail-card">
+                                <div class="detail-label">Статус:</div>
+                                <div class="detail-value">{{ dorama?.status ?? 0 }}</div>
+                            </div>
+                        </div>
 
-                    <button class="soft-fav-btn">
-                        <svg width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <path
-                                d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
-                                fill="none"
-                                stroke="#ff85a2"
-                                stroke-width="1.5" />
-                        </svg>
-                    </button>
+                        <div class="details-column">
+                            <div class="detail-card">
+                                <div class="detail-label">Актеры:</div>
+                                <div class="detail-value">{{ dorama?.actors }}</div>
+                            </div>
+                            <div class="detail-card">
+                                <div class="detail-label">Жанр:</div>
+                                <div class="detail-value">{{ dorama?.genres }}</div>
+                            </div>
+                            <div class="detail-card">
+                                <div class="detail-label">Серий:</div>
+                                <div class="detail-value">{{ dorama?.episodes }}</div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <button class="soft-later-btn">
-                        <svg width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <path
-                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                stroke="#ff85a2"
-                                stroke-width="1.5" />
-                            <path d="M12 6V12L16 14"
-                                stroke="#ff85a2"
-                                stroke-width="1.5"
-                                stroke-linecap="round" />
-                        </svg>
-                    </button>
+                    <div class="movie-description">
+                        <h3 class="section-title">Описание</h3>
+                        <p class="description-text">{{ dorama?.description }}</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="soft-description-section">
-            <h3 class="soft-section-title">Описание</h3>
-            <p class="soft-description-text">{{ dorama?.description }}</p>
-        </div>
-
-        <div class="soft-player-section">
-            <div class="soft-player-header">
-                <h3 class="soft-section-title">Смотреть онлайн</h3>
-                <div class="soft-player-controls">
-                    <div class="soft-quality-selector">
+        <div class="player-section">
+            <div class="player-header">
+                <h3 class="section-title">Смотреть онлайн</h3>
+                <div class="player-controls">
+                    <div class="control-group">
                         <span>Качество:</span>
-                        <select>
+                        <select class="control-select">
                             <option>Full HD</option>
                             <option>HD</option>
                             <option>SD</option>
                         </select>
                     </div>
-                    <div class="soft-audio-selector">
+                    <div class="control-group">
                         <span>Озвучка:</span>
-                        <select>
+                        <select class="control-select">
                             <option>Оригинал</option>
                             <option>Русская</option>
                             <option>Дублированная</option>
                         </select>
                     </div>
-                    <div class="soft-subtitle-selector">
+                    <div class="control-group">
                         <span>Субтитры:</span>
-                        <select>
+                        <select class="control-select">
                             <option>Русские</option>
                             <option>Английские</option>
                             <option>Отсутствуют</option>
@@ -122,76 +126,102 @@
                 </div>
             </div>
 
-            <div class="soft-video-player">
-                <div class="soft-video-placeholder">
-                    <div class="soft-play-icon">
-                        <svg width="48"
-                            height="48"
+            <div class="video-player">
+                <div class="video-placeholder">
+                    <div class="play-overlay">
+                        <svg width="45"
+                            height="45"
                             viewBox="0 0 24 24"
                             fill="none">
-                            <path
-                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                stroke="#FFD1DC"
-                                stroke-width="1.5" />
                             <path d="M10 8L16 12L10 16V8Z"
-                                fill="#FFE4E9"
-                                stroke="#FFB6C1"
-                                stroke-width="1.5"
-                                stroke-linejoin="round" />
+                                fill="#ff85a2" />
                         </svg>
-                    </div>
-                    <p class="soft-placeholder-text">Нажмите для начала просмотра</p>
-                </div>
-            </div>
-
-            <div class="soft-similar-section">
-                <h3 class="soft-section-title">Похожие дорамы</h3>
-                <div class="soft-similar-grid">
-                    <div class="soft-similar-item">
-                        <div class="soft-similar-poster"></div>
-                        <div class="soft-similar-title">Наследие</div>
-                        <div class="soft-similar-rating">8.6</div>
-                    </div>
-                    <div class="soft-similar-item">
-                        <div class="soft-similar-poster"></div>
-                        <div class="soft-similar-title">Игра в кальмара</div>
-                        <div class="soft-similar-rating">9.2</div>
-                    </div>
-                    <div class="soft-similar-item">
-                        <div class="soft-similar-poster"></div>
-                        <div class="soft-similar-title">Слава</div>
-                        <div class="soft-similar-rating">8.8</div>
+                        <p>Нажмите для начала просмотра</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="soft-comments-section">
-            <h3 class="soft-section-title">Комментарии</h3>
-            <div class="soft-comments-container">
-                <div class="soft-comment-form">
-                    <textarea placeholder="Оставьте ваш комментарий..."
-                        class="soft-comment-input"></textarea>
-                    <button class="soft-comment-submit">Отправить</button>
+        <h3 class="section-title similar-title">Похожие дорамы</h3>
+        <div class="similar-section">
+            <div class="vertical-grid">
+                <div class="movie-card-vertical">
+                    <div class="vertical-poster-wrapper">
+                        <div class="empty-poster"></div>
+                        <div class="vertical-rating">8.6</div>
+                    </div>
+                    <div class="vertical-movie-info">
+                        <h3 class="vertical-movie-title">Наследие</h3>
+                        <p class="vertical-movie-year">2020</p>
+                    </div>
                 </div>
-                <div class="soft-comments-list">
-                    <div class="soft-comment">
-                        <div class="soft-comment-avatar"></div>
-                        <div class="soft-comment-content">
-                            <div class="soft-comment-author">Алексей Петров</div>
-                            <div class="soft-comment-text">Отличная дорама! Смотрел уже три раза, и каждый раз нахожу
-                                что-то
-                                новое.</div>
-                            <div class="soft-comment-meta">2 часа назад • Оценка: 9/10</div>
+                <div class="movie-card-vertical">
+                    <div class="vertical-poster-wrapper">
+                        <div class="empty-poster"></div>
+                        <div class="vertical-rating">9.2</div>
+                    </div>
+                    <div class="vertical-movie-info">
+                        <h3 class="vertical-movie-title">Игра в кальмара</h3>
+                        <p class="vertical-movie-year">2021</p>
+                    </div>
+                </div>
+                <div class="movie-card-vertical">
+                    <div class="vertical-poster-wrapper">
+                        <div class="empty-poster"></div>
+                        <div class="vertical-rating">8.8</div>
+                    </div>
+                    <div class="vertical-movie-info">
+                        <h3 class="vertical-movie-title">Слава</h3>
+                        <p class="vertical-movie-year">2018</p>
+                    </div>
+                </div>
+                <div class="movie-card-vertical">
+                    <div class="vertical-poster-wrapper">
+                        <div class="empty-poster"></div>
+                        <div class="vertical-rating">8.4</div>
+                    </div>
+                    <div class="vertical-movie-info">
+                        <h3 class="vertical-movie-title">Любовь в лунном свете</h3>
+                        <p class="vertical-movie-year">2016</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comments-section">
+            <h3 class="section-title">Комментарии</h3>
+
+            <div class="comment-form">
+                <input type="text"
+                    placeholder="Оставьте ваш комментарий..."
+                    class="comment-input">
+                <button class="btn-comment">Отправить</button>
+            </div>
+
+            <div class="comments-list">
+                <div class="comment">
+                    <div class="comment-avatar">А</div>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">Алексей Петров</span>
+                            <span class="comment-date">2 часа назад</span>
+                            <span class="comment-rating">Оценка: 9/10</span>
+                        </div>
+                        <div class="comment-text">
+                            Отличная дорама! Смотрел уже три раза, и каждый раз нахожу что-то новое.
                         </div>
                     </div>
-                    <div class="soft-comment">
-                        <div class="soft-comment-avatar"></div>
-                        <div class="soft-comment-content">
-                            <div class="soft-comment-author">Мария Иванова</div>
-                            <div class="soft-comment-text">Актерская игра просто потрясающая, но сюжет немного
-                                предсказуем.</div>
-                            <div class="soft-comment-meta">5 часов назад • Оценка: 7/10</div>
+                </div>
+                <div class="comment">
+                    <div class="comment-avatar">М</div>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">Мария Иванова</span>
+                            <span class="comment-date">5 часов назад</span>
+                            <span class="comment-rating">Оценка: 7/10</span>
+                        </div>
+                        <div class="comment-text">
+                            Актерская игра просто потрясающая, но сюжет немного предсказуем.
                         </div>
                     </div>
                 </div>

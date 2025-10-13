@@ -7,7 +7,7 @@ const connect = require('./connect');
 
 async function fillDatabase() {
     try {
-        connect.initDatabase();
+        await connect.initDatabase();
 
         console.log('заполнение базы...');
 
@@ -56,7 +56,7 @@ async function fillDatabase() {
         const movieData = await movieParser.parseMovies();
         console.log('найдено новых фильмов:', movieData.length);
         await connect.saveMovie(movieData);
-        console.log('база данных с новыми фильмами заполнена!')
+        console.log('база данных с новыми фильмами заполнена!');
 
     } catch (error) {
         console.log('ОШИБКА:', error);
@@ -65,3 +65,4 @@ async function fillDatabase() {
 }
 
 fillDatabase();
+

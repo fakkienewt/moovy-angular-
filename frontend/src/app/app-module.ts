@@ -10,13 +10,13 @@ import { Dorama } from './content/dorama/dorama';
 import { Films } from './content/films/films';
 import { Series } from './content/series/series';
 import { MainPagination } from './paginations/main-pagination/main-pagination';
-import { NewFilmsPagination } from './paginations/new-films-pagination/new-films-pagination';
 import { NewFilmsService } from './services/new-films-service';
 import { Service } from './services/service';
 import { NewFilms } from './basic/new-films/new-films';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Filters } from './content/filters/filters';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,6 @@ import { Filters } from './content/filters/filters';
     Films,
     Series,
     MainPagination,
-    NewFilmsPagination,
     NewFilms,
     Filters,
   ],
@@ -36,7 +35,8 @@ import { Filters } from './content/filters/filters';
     CommonModule,
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

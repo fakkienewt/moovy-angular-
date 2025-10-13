@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { Film } from '../../models.ts/film.model';
 import { Router } from '@angular/router';
 import { NewFilmsService } from '../../services/new-films-service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-films',
@@ -13,7 +14,7 @@ import { NewFilmsService } from '../../services/new-films-service';
 export class NewFilms implements OnInit {
 
   moviesList$: Observable<Film[]> = of([]);
-  loading$ = true;
+  loading = true;
 
   constructor(
     private _newMoviesService: NewFilmsService,
@@ -24,7 +25,7 @@ export class NewFilms implements OnInit {
     this.moviesList$ = this._newMoviesService.moviesList$;
     this._newMoviesService.load();
     this._newMoviesService.loading$.subscribe(loading => {
-      this.loading$ = loading;
+      this.loading = loading;
     });
   }
 
@@ -51,5 +52,13 @@ export class NewFilms implements OnInit {
     this.router.navigate([`movie/${movie.id}`], {
       state: { movie: movie }
     });
+  }
+
+  onClickNext(): void {
+    this._newMoviesService.moveRight();
+  }
+
+  onClickPrev(): void {
+    this._newMoviesService.moveLeft();
   }
 }

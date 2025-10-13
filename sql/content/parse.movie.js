@@ -3,126 +3,103 @@ const axios = require('axios');
 
 const axiosConfig = {
     headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Referer': 'https://w140.zona.plus/',
     }
 };
 
-async function parseMovies() {
+async function parseMovies(page = 1) {
     try {
-        const url = 'https://w140.zona.plus/';
-        const response = await axios.get(url);
-        const $ = cheerio.load(response.data);
-        const movies = [];
+        console.log(`парсим страницу ${page}...`);
 
-        const items = $('.popularMovies .item').slice(0, 4);
+        let url = `https://w140.zona.plus/movies?page=${page}`;
+        const response = await axios.get(url, axiosConfig);
+        const $ = cheerio.load(response.data);
+        const films = [];
+
+        const items = $('.results-item-wrap').slice(0, 20);
 
         for (let i = 0; i < items.length; i++) {
             const element = items[i];
             const $el = $(element);
 
-            const poster = $el.find('.cover').css('background-image');
-            const movieUrl = $el.find('a').attr('href');
-            const title = $el.find('.title').text().trim();
+            const title = $el.find('.results-item-title').text().trim();
+            const filmUrl = $el.find('.results-item').attr('href');
 
-            const ratingText = $el.find('.rating').text().trim();
-            const rating = ratingText ? parseFloat(ratingText) : 0;
+            const posterStyle = $el.find('.result-item-preview').css('background-image');
+            let poster = posterStyle ? posterStyle.match(/url\(['"]?(.*?)['"]?\)/)?.[1] : null;
 
-            const yearText = $el.find('.year').text().trim();
-            const year = yearText ? parseInt(yearText) : 2025;
+            const rating = parseFloat($el.find('.results-item-rating span').text().trim()) || 0;
+            const year = parseInt($el.find('.results-item-year').text().trim()) || new Date().getFullYear();
 
-            let description = '';
-            let genres = [];
-            let countries = [];
-            let time = '';
-            let premiere = '';
-            let director = [];
-            let actors = [];
-            let author = [];
+            console.log(`парсим: "${title}"`);
 
-            if (movieUrl) {
+            let filmData = {
+                title: title,
+                poster: poster,
+                url: filmUrl ? `https://w140.zona.plus${filmUrl}` : null,
+                rating: rating,
+                year: year,
+                description: '',
+                genres: [],
+                countries: [],
+                director: [],
+                actors: [],
+                author: [],
+                videoMP4: null
+            };
+
+            if (filmUrl) {
                 try {
-                    const fullUrl = `https://w140.zona.plus${movieUrl}`;
+                    const fullUrl = `https://w140.zona.plus${filmUrl}`;
                     const descResponse = await axios.get(fullUrl, axiosConfig);
                     const desc$ = cheerio.load(descResponse.data);
 
-                    description = desc$('.entity-desc-description').text().trim();
+                    filmData.description = desc$('.entity-desc-description').text().trim();
 
                     desc$('.entity-desc-item-wrap').each((index, item) => {
                         const $item = desc$(item);
                         const label = $item.find('.entity-desc-item').text().trim();
-
                         if (label === 'Жанры') {
-                            genres = $item.find('.entity-desc-link-u')
-                                .slice(0, 3)
-                                .map((i, el) => desc$(el).text().trim())
-                                .get();
+                            filmData.genres = $item.find('.entity-desc-link-u')
+                                .slice(0, 3).map((i, el) => desc$(el).text().trim()).get();
                         }
-
                         if (label === 'Страна' || label === 'Страны') {
-                            countries = $item.find('.entity-desc-link-u')
-                                .map((i, el) => desc$(el).text().trim())
-                                .get();
+                            filmData.countries = $item.find('.entity-desc-link-u')
+                                .map((i, el) => desc$(el).text().trim()).get();
                         }
                     });
 
-                    time = desc$('.entity-desc-item:contains("Время") + .entity-desc-value time').text().trim();
-
-                    const premiereBlock = desc$('.entity-desc-item:contains("Премьера") + .entity-desc-value');
-                    if (premiereBlock.length) {
-                        const worldPremiere = premiereBlock.find('span').first().text().trim();
-                        premiere = worldPremiere.split('в мире')[0].trim();
-                    }
-
-                    director = [];
+                    filmData.director = [];
                     desc$('.entity-desc-item:contains("Режиссёр") + .entity-desc-value [itemprop="director"] [itemprop="name"]').each((index, el) => {
-                        director.push(desc$(el).text().trim());
+                        filmData.director.push(desc$(el).text().trim());
                     });
 
-
-                    actors = [];
+                    filmData.actors = [];
                     desc$('.entity-desc-item:contains("Актёры") + .entity-desc-value [itemprop="actor"] [itemprop="name"]').slice(0, 3).each((index, el) => {
-                        actors.push(desc$(el).text().trim());
+                        filmData.actors.push(desc$(el).text().trim());
                     });
 
-                    author = [];
-                    desc$('.entity-desc-item:contains("Сценарий") + .entity-desc-value [itemprop="author"] [itemprop="name"]').each((index, el) => {
-                        author.push(desc$(el).text().trim());
+                    filmData.author = [];
+                    desc$('.entity-desc-item:contains("Сценарий") + .entity-desc-value [itemprop="author"] [itemprop="name"]').slice(0, 3).each((index, el) => {
+                        filmData.author.push(desc$(el).text().trim());
                     });
 
                 } catch (error) {
-                    console.log('Ошибка:', error.message);
+                    console.log(`ошибка: ${title}`);
                 }
             }
 
-            movies.push({
-                index: i,
-                poster: poster,
-                url: movieUrl ? `https://w140.zona.plus${movieUrl}` : null,
-                title: title,
-                rating: rating,
-                year: year,
-                description: description,
-                genres: genres,
-                countries: countries,
-                time: time,
-                premiere: premiere,
-                director: director,
-                actors: actors,
-                author: author
-            });
+            films.push(filmData);
+            console.log(`готово: "${title}"`);
         }
 
-        return movies;
+        return films;
 
     } catch (error) {
-        console.error('Ошибка:', error.message);
+        console.log('ошибка парсинга:', error.message);
         throw error;
     }
 }
 
-module.exports = { parseMovies }
+module.exports = { parseMovies };

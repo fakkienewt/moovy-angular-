@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const connect = require('./connect');
 const mysql = require('mysql2');
 
 const app = express();
@@ -34,10 +35,10 @@ app.get('/api/movies', async (req, res) => {
         const countOnPage = 20;
         const offset = countOnPage * (page - 1);
 
-        const movie = await query('SELECT * FROM movie LIMIT ? OFFSET ?', [countOnPage, offset]);
+        const movie = await query('SELECT * FROM movies LIMIT ? OFFSET ?', [countOnPage, offset]);
         res.json(movie);
     } catch (error) {
-        res.status(500).json({ error: 'Ошибка получения новинок' });
+        res.status(500).json({ error: 'ERRORR' });
     }
 });
 
@@ -50,7 +51,7 @@ app.get('/api/films', async (req, res) => {
         const films = await query('SELECT * FROM films LIMIT ? OFFSET ?', [countOnPage, offset]);
         res.json(films);
     } catch (error) {
-        res.status(500).json({ error: 'Ошибка получения фильмов' });
+        res.status(500).json({ error: 'ERROR' });
     }
 });
 
@@ -63,7 +64,7 @@ app.get('/api/series', async (req, res) => {
         const series = await query('SELECT * FROM series LIMIT ? OFFSET ?', [countOnPage, offset]);
         res.json(series);
     } catch (error) {
-        res.status(500).json({ error: 'Ошибка получения сериалов' });
+        res.status(500).json({ error: 'ERRORR' });
     }
 });
 
@@ -76,20 +77,32 @@ app.get('/api/dorama', async (req, res) => {
         const dorama = await query('SELECT * FROM dorama LIMIT ? OFFSET ?', [countOnPage, offset]);
         res.json(dorama);
     } catch (error) {
-        res.status(500).json({ error: 'Ошибка получения дорам' });
+        res.status(500).json({ error: 'ERRORR' });
     }
 });
 
 app.get('/api/anime', async (req, res) => {
     try {
+        const year = req.query.year;
         const page = parseInt(req.query.page) || 1;
         const countOnPage = 20;
         const offset = countOnPage * (page - 1);
 
-        const anime = await query('SELECT * FROM anime LIMIT ? OFFSET ?', [countOnPage, offset]);
+        const anime = year
+            ? await query('SELECT * FROM anime WHERE year=? LIMIT ? OFFSET ?', [year, countOnPage, offset])
+            : await query('SELECT * FROM anime LIMIT ? OFFSET ?', [countOnPage, offset]);
         res.json(anime);
     } catch (error) {
-        res.status(500).json({ error: 'Ошибка получения аниме. ' + error });
+        res.status(500).json({ error: 'ERROR' + error });
+    }
+});
+
+app.get('/api/filters', async (req, res) => {
+    try {
+        const result = await connect.getFiltersData();
+        res.json(result);
+    } catch (err) {
+        console.log(err);
     }
 });
 

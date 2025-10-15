@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: space-between;
     position: relative;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
 }
 
 .carousel-arrow {
@@ -45,17 +46,13 @@
     box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
-.arrow-circle:active {
-    transform: scale(0.95);
-}
-
 .new-label {
     margin: 20px 0 0 0;
     background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     color: white;
     padding: 12px 30px;
     border-radius: 20px 20px 0 0;
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
@@ -94,11 +91,6 @@
     animation: fadeInUp 0.6s ease-out;
 }
 
-.movie-card-vertical:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(255, 182, 193, 0.4);
-}
-
 .poster-wrapper {
     position: relative;
     width: 140px;
@@ -128,14 +120,12 @@
     color: white;
     padding: 5px 10px;
     border-radius: 15px;
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     font-size: 14px;
     font-weight: bold;
     box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
 }
 
 .movie-title {
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     font-size: 16px;
     font-weight: bold;
     color: #ff85a2;
@@ -143,11 +133,9 @@
 }
 
 .movie-year {
-    font-family: 'Arial', sans-serif;
     font-size: 14px;
     color: #ff9dbb;
     margin: 0;
-    font-weight: 500;
 }
 
 .empty-poster {

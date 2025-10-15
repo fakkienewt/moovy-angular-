@@ -159,12 +159,6 @@
     box-shadow: 0 1px 4px rgba(255, 182, 193, 0.08);
 }
 
-.detail-card:hover {
-    border-color: #ff85a2;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(255, 182, 193, 0.15);
-}
-
 .detail-label {
     font-weight: 700;
     color: #ff85a2;
@@ -185,7 +179,6 @@
     border-radius: 16px;
     padding: 20px;
     border: 2px solid #ffd1dc;
-    flex: 1;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.1);
@@ -248,6 +241,7 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.3s ease;
+    outline: none;
 }
 
 .control-select:focus {
@@ -319,11 +313,6 @@
     cursor: pointer;
 }
 
-.movie-card-vertical:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(255, 182, 193, 0.4);
-}
-
 .vertical-poster-wrapper {
     position: relative;
     width: 160px;
@@ -348,7 +337,6 @@
     color: white;
     padding: 6px 12px;
     border-radius: 14px;
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     font-size: 14px;
     font-weight: bold;
     box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3);
@@ -359,7 +347,6 @@
 }
 
 .vertical-movie-title {
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     font-size: 16px;
     font-weight: bold;
     color: #ff85a2;
@@ -370,22 +357,9 @@
 }
 
 .vertical-movie-year {
-    font-family: 'Arial', sans-serif;
     font-size: 14px;
     color: #ff9dbb;
     margin: 0;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .comments-section {
@@ -468,11 +442,6 @@
     transition: all 0.3s ease;
 }
 
-.comment:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
-}
-
 .comment-avatar {
     width: 50px;
     height: 50px;
@@ -501,12 +470,6 @@
 
 .comment-date {
     color: #ff9dbb;
-    font-size: 14px;
-}
-
-.comment-rating {
-    color: #ff85a2;
-    font-weight: 600;
     font-size: 14px;
 }
 

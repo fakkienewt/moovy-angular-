@@ -68,7 +68,8 @@ function initDatabase() {
         episodes INT,
         director TEXT,
         genres TEXT,
-        status TEXT
+        status TEXT, 
+        countries TEXT 
     )`;
 
     let dorama = `
@@ -119,8 +120,8 @@ async function saveAnime(animeData) {
 
     for (let anime of animeData) {
         const query = `
-        INSERT INTO anime(title, poster, rating, year, description, episodes, director, genres, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO anime(title, poster, rating, year, description, time, episodes, director, genres, status, countries)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -129,10 +130,12 @@ async function saveAnime(animeData) {
             anime.rating,
             anime.year,
             anime.description,
+            anime.time,
             anime.episodes,
             Array.isArray(anime.director) ? anime.director.join(', ') : anime.director,
             Array.isArray(anime.genres) ? anime.genres.join(', ') : anime.genres,
-            anime.status
+            anime.status, 
+            anime.countries
         ];
 
         connection.execute(query, values, function (error, results) {

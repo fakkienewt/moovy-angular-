@@ -102,7 +102,51 @@ app.get('/api/filters', async (req, res) => {
         const result = await connect.getFiltersData();
         res.json(result);
     } catch (err) {
-        console.log(err);
+    }
+});
+
+app.get('/api/filtered-content', async (req, res) => {
+    try {
+        const { type, genre, country, year, page = 1 } = req.query;
+        const currentPage = parseInt(page);
+        const countOnPage = 20;
+        const offset = countOnPage * (currentPage - 1);
+
+        let tableName;
+        if (type === 'film') tableName = 'films';
+        else if (type === 'serie') tableName = 'series';
+        else if (type === 'anime') tableName = 'anime';
+        else if (type === 'dorama') tableName = 'dorama';
+        else {
+            return res.status(400).json({ error: 'Неверный тип контента' });
+        }
+
+        let sql = `SELECT * FROM ${tableName} WHERE 1=1`;
+
+        if (genre) {
+            if (tableName === 'films' || tableName === 'series' || tableName === 'anime' || tableName === 'dorama') {
+                sql += ` AND genres LIKE '%${genre}%'`; 
+            } else {
+                sql += ` AND genre LIKE '%${genre}%'`;
+            }
+        }
+
+        if (country && (tableName === 'films' || tableName === 'series' || tableName == 'anime' || tableName === 'dorama')) {
+            sql += ` AND countries LIKE '%${country}%'`; 
+        }
+
+        if (year) {
+            sql += ` AND year = '${year}'`;
+        }
+
+        sql += ` LIMIT ${countOnPage} OFFSET ${offset}`;
+
+        const result = await query(sql);
+
+        res.json(result);
+    } catch (err) {
+        console.error('ERRORR:', err);
+        res.status(500).json({ error: err.message });
     }
 });
 

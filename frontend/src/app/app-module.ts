@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Filters } from './content/filters/filters';
 import { FormsModule } from '@angular/forms';
+import { FilterPagination } from './paginations/filter-pagination/filter-pagination';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { FormsModule } from '@angular/forms';
     MainPagination,
     NewFilms,
     Filters,
+    FilterPagination,
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,7 @@ import { FormsModule } from '@angular/forms';
   providers: [
     provideBrowserGlobalErrorListeners(),
     NewFilmsService,
-    Service,
+    Service
   ],
   bootstrap: [App]
 })

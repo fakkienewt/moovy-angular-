@@ -20,18 +20,9 @@ export class Dorama implements OnInit {
       this.error = true;
     }
   }
-  
-  getPosterUrl(poster: string | undefined): string {
+
+  getPosterUrl(poster: string | null | undefined): string {
     if (!poster) return '/assets/default-poster.jpg';
-    let cleanPoster = poster.replace(/^['"]|['"]$/g, '').trim();
-    const bgMatch = cleanPoster.match(/url\(['"]?(.*?)['"]?\)/);
-    if (bgMatch && bgMatch[1]) {
-      cleanPoster = bgMatch[1];
-    }
-    cleanPoster = cleanPoster.split(',')[0].trim();
-    if (cleanPoster.startsWith('http')) {
-      return cleanPoster;
-    }
-    return '/assets/default-poster.jpg';
+    return poster.startsWith('http') ? poster : '/assets/default-poster.jpg';
   }
 }

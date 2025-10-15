@@ -8,25 +8,14 @@
     box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
     border-bottom: 3px solid #ffd1dc;
     position: relative;
-    animation: headerGlow 3s ease-in-out infinite alternate;
     border-radius: 30px;
-}
-
-@keyframes headerGlow {
-    0% {
-        box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
-    }
-
-    100% {
-        box-shadow: 0 4px 30px rgba(255, 182, 193, 0.5);
-    }
+    font-family: 'Comic Sans MS', cursive;
 }
 
 .header-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 auto;
 }
 
 .logo-section {
@@ -48,7 +37,6 @@
     border: 3px solid #ffd1dc;
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
     transition: all 0.3s ease;
-    animation: bounce 2s ease-in-out infinite;
     cursor: pointer;
 }
 
@@ -65,7 +53,6 @@
     color: #ff85a2;
     padding: 5px 10px;
     border-radius: 20px;
-    font-family: 'Comic Sans MS', cursive;
     font-size: 14px;
     font-weight: bold;
     border: 2px solid #ffd1dc;
@@ -74,8 +61,6 @@
 }
 
 @keyframes bubblePop {
-
-    0%,
     100% {
         transform: scale(1);
     }
@@ -91,18 +76,7 @@
     font-weight: bold;
     color: #ff85a2;
     text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
-    animation: textGlow 2s ease-in-out infinite alternate;
     cursor: pointer;
-}
-
-@keyframes textGlow {
-    0% {
-        text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
-    }
-
-    100% {
-        text-shadow: 2px 2px 8px rgba(255, 182, 193, 0.6);
-    }
 }
 
 .search-section {
@@ -190,18 +164,6 @@
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
     border: 2px solid #ffd1dc;
     animation: profileFloat 3s ease-in-out infinite;
-}
-
-@keyframes profileFloat {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-3px);
-    }
 }
 
 .profile-btn:hover {

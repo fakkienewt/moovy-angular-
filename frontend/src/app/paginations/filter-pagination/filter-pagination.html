@@ -1,0 +1,7 @@
+<div class="pagination">
+    <button (click)="onBack()"
+        [disabled]="currentPage === 1">Назад</button>
+    <span>{{ currentPage }}</span>
+    <button (click)="onNext()"
+        [disabled]="!hasMoreContent">Вперёд</button>
+</div>

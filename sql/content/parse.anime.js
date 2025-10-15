@@ -68,6 +68,7 @@ async function parseAnime(page = 1) {
             let episodes = 0;
             let status = 'Завершен';
             let director = 'Не указан';
+            let countries = 'Япония';
 
             const directorElement = $el.find('p:contains("Режиссёр:")');
             if (directorElement.length) {
@@ -124,7 +125,9 @@ async function parseAnime(page = 1) {
                 status: status,
                 year: year,
                 director: director,
+                countries: countries
             });
+
         }
 
         return allAnime;

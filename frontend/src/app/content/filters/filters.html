@@ -63,7 +63,7 @@
                             [(ngModel)]="selectedYear">
                             <option value="">Все годы</option>
                             <option [value]="year"
-                                *ngFor="let year of filter?.years">{{year}}</option>
+                                *ngFor="let year of filter?.years?.sort()">{{year}}</option>
                         </select>
                     </div>
 
@@ -82,9 +82,43 @@
 
         <div class="filter-actions">
             <button class="btn-apply"
-                (click)="onClickCheck()">Применить</button>
+                (click)="onApply()">Применить</button>
             <button class="btn-reset"
                 (click)="onReset()">Сбросить</button>
         </div>
+
+        <div class="search-results"
+            *ngIf="foundedContent.length > 0">
+            <h3 class="results-title">Найдено:</h3>
+            <div class="vertical-grid">
+                <div class="movie-card-vertical"
+                    *ngFor="let film of foundedContent">
+                    <div class="poster-wrapper">
+                        <img [src]="getPosterUrlFilm(film.poster)"
+                            class="poster-image"
+                            (click)="onClickPage(film)">
+                        <div class="movie-rating">{{ film.rating }}</div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">{{ film.title }}</h3>
+                        <p class="movie-year">{{ film.year }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="hasSearched && foundedContent.length === 0"
+            class="no-results-minimal">
+            <div class="no-results-minimal-content">
+                <h3 class="no-results-minimal-title">Ничего не найдено</h3>
+                <p class="no-results-minimal-subtitle">Попробуйте другие параметры поиска</p>
+            </div>
+        </div>
+
     </div>
+    <app-filter-pagination *ngIf="hasSearched && foundedContent.length > 0"
+        [currentPage]="currentPage"
+        [hasMoreContent]="hasMoreContent"
+        (pageChanged)="onPageChanged($event)">
+    </app-filter-pagination>
 </div>

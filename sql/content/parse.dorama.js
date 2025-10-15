@@ -22,6 +22,8 @@ async function parseDorama(page = 1) {
 
             const items = $('.post-list');
 
+            if (items.length === 0) break;
+
             for (let i = 0; i < items.length; i++) {
 
                 const element = items[i];
@@ -86,8 +88,16 @@ async function parseDorama(page = 1) {
                                 if (actorName.endsWith(',')) {
                                     actorName = actorName.slice(0, -1);
                                 }
+
                                 if (actorName) {
-                                    actors.push(actorName);
+                                    if (actors.includes(actorName)) {
+                                        return;
+                                    } else {
+                                        actors.push(actorName);
+                                        return;
+                                    }
+                                } else if (!actorName) {
+                                    actors.push(['НЕ указаны']);
                                 }
                             });
                         }

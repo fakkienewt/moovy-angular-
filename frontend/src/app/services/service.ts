@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Film } from '../models.ts/film.model';
 import { Filter } from '../models.ts/filter.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,5 +63,11 @@ export class Service {
 
   getFilterData(): Observable<Filter> {
     return this.http.get<Filter>(`${this.baseUrl}/filters`);
+  }
+
+  getFilteredData(type: string, genre: string, country: string, year: string, page: number = 1): Observable<Film[]> {
+    return this.http.get<Film[]>(
+      `${this.baseUrl}/filtered-content?type=${type}&genre=${genre}&country=${country}&year=${year}&page=${page}`
+    );
   }
 }

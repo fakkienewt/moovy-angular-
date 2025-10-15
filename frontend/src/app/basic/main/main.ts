@@ -82,11 +82,19 @@ export class Main implements OnInit {
   }
 
   loadFilmsWithPagination(): void {
+
     this.loading_pagination = true;
     this.films = [];
 
     this.MainService.getFilms().subscribe({
       next: (data: Film[]) => {
+
+        if (!data.length) {
+          this.MainService.backPage();
+          this.loadFilmsWithPagination();
+          return;
+        }
+
         this.films = data;
         this.loading_pagination = false;
       }
@@ -99,6 +107,13 @@ export class Main implements OnInit {
 
     this.MainService.getSeries().subscribe({
       next: (data: Film[]) => {
+
+        if (!data.length) {
+          this.MainService.backPage();
+          this.loadSeriesWithPagination();
+          return;
+        }
+
         this.seriesList = data;
         this.loading_pagination = false;
       }
@@ -111,10 +126,17 @@ export class Main implements OnInit {
 
     this.MainService.getDorama().subscribe({
       next: (data: Film[]) => {
+
+        if (!data.length) {
+          this.MainService.backPage();
+          this.loadDoramaWithPagination();
+          return;
+        }
+
         this.dorama = data;
         this.loading_pagination = false;
       }
-    })
+    });
   }
 
   loadAnimeWithPagination(): void {
@@ -123,10 +145,17 @@ export class Main implements OnInit {
 
     this.MainService.getAnime().subscribe({
       next: (data: Film[]) => {
+
+        if (!data.length) {
+          this.MainService.backPage();
+          this.loadAnimeWithPagination();
+          return;
+        }
+
         this.anime = data;
         this.loading_pagination = false;
       }
-    })
+    });
   }
 
   loadFilms(): void {
@@ -195,20 +224,7 @@ export class Main implements OnInit {
 
   getPosterUrlFilm(poster: string | null | undefined): string {
     if (!poster) return '/assets/default-poster.jpg';
-
-    let cleanPoster = poster.replace(/^['"]|['"]$/g, '').trim();
-    const bgMatch = cleanPoster.match(/url\(['"]?(.*?)['"]?\)/);
-
-    if (bgMatch && bgMatch[1]) {
-      cleanPoster = bgMatch[1];
-    }
-
-    cleanPoster = cleanPoster.split(',')[0].trim();
-
-    if (cleanPoster.startsWith('http')) {
-      return cleanPoster;
-    }
-    return '/assets/default-poster.jpg';
+    return poster.startsWith('http') ? poster : '/assets/default-poster.jpg';
   }
 
   onClickPageFilm(film: Film): void {

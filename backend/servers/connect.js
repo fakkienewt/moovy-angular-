@@ -114,7 +114,7 @@ async function getFiltersData() {
         const filtersData = {
             years: [],
             countries: [],
-            genres: [],
+            genres: []
         };
 
         const genresQ =

@@ -1,102 +1,126 @@
 <div class="filters-container">
     <div class="filters-main-card">
-        <div class="filters-content">
-            <div class="filter-column">
-                <div class="filter-section">
-                    <legend class="filter-legend">Тип:</legend>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio"
-                                name="type"
-                                value="film"
-                                [(ngModel)]="selectedType"
-                                class="radio-input">
-                            <span class="radio-custom"></span>
-                            <span class="radio-text">Фильмы</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio"
-                                name="type"
-                                value="serie"
-                                [(ngModel)]="selectedType"
-                                class="radio-input">
-                            <span class="radio-custom"></span>
-                            <span class="radio-text">Сериалы</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio"
-                                name="type"
-                                value="anime"
-                                [(ngModel)]="selectedType"
-                                class="radio-input">
-                            <span class="radio-custom"></span>
-                            <span class="radio-text">Аниме</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio"
-                                name="type"
-                                value="dorama"
-                                [(ngModel)]="selectedType"
-                                class="radio-input">
-                            <span class="radio-custom"></span>
-                            <span class="radio-text">Дорамы</span>
-                        </label>
-                    </div>
+        <div class="filters-header">
+            <div class="header-content">
+                <h1 class="filters-title">Расширенный поиск</h1>
+                <p class="filters-subtitle">Точная настройка параметров</p>
+            </div>
+        </div>
+
+        <div class="filters-body">
+            <div class="filter-section">
+                <div class="section-header">
+                    <h3 class="section-title">Тип контента</h3>
+                </div>
+                <div class="type-grid">
+                    <label class="type-item">
+                        <input type="radio"
+                            name="type"
+                            value="film"
+                            [(ngModel)]="selectedType"
+                            class="type-input">
+                        <div class="type-content">
+                            <span class="type-label">Фильмы</span>
+                        </div>
+                    </label>
+                    <label class="type-item">
+                        <input type="radio"
+                            name="type"
+                            value="serie"
+                            [(ngModel)]="selectedType"
+                            class="type-input">
+                        <div class="type-content">
+                            <span class="type-label">Сериалы</span>
+                        </div>
+                    </label>
+                    <label class="type-item">
+                        <input type="radio"
+                            name="type"
+                            value="anime"
+                            [(ngModel)]="selectedType"
+                            class="type-input">
+                        <div class="type-content">
+                            <span class="type-label">Аниме</span>
+                        </div>
+                    </label>
+                    <label class="type-item">
+                        <input type="radio"
+                            name="type"
+                            value="dorama"
+                            [(ngModel)]="selectedType"
+                            class="type-input">
+                        <div class="type-content">
+                            <span class="type-label">Дорамы</span>
+                        </div>
+                    </label>
                 </div>
             </div>
 
-            <div class="filter-column">
-                <div class="selects-section">
-                    <div class="select-group">
-                        <label class="select-label">Жанры:</label>
-                        <select class="cute-select"
+            <div class="filter-section">
+                <div class="section-header">
+                    <h3 class="section-title">Параметры фильтрации</h3>
+                </div>
+                <div class="filters-row">
+                    <div class="filter-item">
+                        <label class="filter-name">Жанр</label>
+                        <select class="filter-select"
                             [(ngModel)]="selectedGenre">
                             <option value="">Все жанры</option>
                             <option [value]="genre"
                                 *ngFor="let genre of filter?.genres?.sort()">{{genre}}</option>
                         </select>
                     </div>
-
-                    <div class="select-group">
-                        <label class="select-label">Годы:</label>
-                        <select class="cute-select"
+                    <div class="filter-item">
+                        <label class="filter-name">Год выпуска</label>
+                        <select class="filter-select"
                             [(ngModel)]="selectedYear">
                             <option value="">Все годы</option>
                             <option [value]="year"
                                 *ngFor="let year of filter?.years?.sort()">{{year}}</option>
                         </select>
                     </div>
-
-                    <div class="select-group">
-                        <label class="select-label">Страны</label>
-                        <select class="cute-select"
+                    <div class="filter-item">
+                        <label class="filter-name">Страна</label>
+                        <select class="filter-select"
                             [(ngModel)]="selectedCountry">
-                            <option value="">Все страны:</option>
+                            <option value="">Все страны</option>
                             <option [value]="country"
                                 *ngFor="let country of filter?.countries?.sort()">{{country}}</option>
                         </select>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="filter-actions">
-            <button class="btn-apply"
-                (click)="onApply()">Применить</button>
-            <button class="btn-reset"
-                (click)="onReset()">Сбросить</button>
+            <div class="actions-section">
+                <button class="action-btn secondary"
+                    (click)="onReset()">
+                    <span class="btn-text">Очистить всё</span>
+                </button>
+                <button class="action-btn primary"
+                    (click)="onApply()">
+                    <span class="btn-text">Найти</span>
+                </button>
+            </div>
         </div>
 
         <div class="search-results"
             *ngIf="foundedContent.length > 0">
-            <h3 class="results-title">Найдено:</h3>
+            <div class="results-header-modern">
+                <div class="results-info">
+                    <h2 class="results-title">Результаты поиска</h2>
+                    <div class="results-stats">
+                        <span class="results-count">{{foundedContent.length}}</span>
+                        <span class="results-label">найдено</span>
+                    </div>
+                </div>
+            </div>
             <div class="vertical-grid">
                 <div class="movie-card-vertical"
-                    *ngFor="let film of foundedContent">
+                    *ngFor="let film of foundedContent"
+                    (click)="onClickPage(film)">
                     <div class="poster-wrapper">
                         <img [src]="getPosterUrlFilm(film.poster)"
-                            class="poster-image"
-                            (click)="onClickPage(film)">
+                            class="poster-image">
                         <div class="movie-rating">{{ film.rating }}</div>
                     </div>
                     <div class="movie-info">
@@ -108,14 +132,14 @@
         </div>
 
         <div *ngIf="hasSearched && foundedContent.length === 0"
-            class="no-results-minimal">
-            <div class="no-results-minimal-content">
-                <h3 class="no-results-minimal-title">Ничего не найдено</h3>
-                <p class="no-results-minimal-subtitle">Попробуйте другие параметры поиска</p>
+            class="empty-state-modern">
+            <div class="empty-content-modern">
+                <h3 class="empty-title-modern">Ничего не найдено</h3>
+                <p class="empty-text-modern">Попробуйте изменить параметры поиска</p>
             </div>
         </div>
-
     </div>
+
     <app-filter-pagination *ngIf="hasSearched && foundedContent.length > 0"
         [currentPage]="currentPage"
         [hasMoreContent]="hasMoreContent"

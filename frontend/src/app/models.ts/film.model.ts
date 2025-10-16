@@ -13,5 +13,5 @@ export class Film {
     author?: string;
     episodes?: number;
     status?: string;
-    videoMP4?: any;
+    type?: string;
 }

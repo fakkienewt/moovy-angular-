@@ -130,7 +130,7 @@ async function getFiltersData() {
                 const words = genre.split(',');
                 words.forEach(w => {
                     if (!filtersData.genres.includes(w.trim().toLowerCase())) {
-                        filtersData.genres.push(w.trim().toLowerCase()); 
+                        filtersData.genres.push(w.trim().toLowerCase());
                     }
                 });
             });
@@ -161,6 +161,7 @@ async function getFiltersData() {
                 'SELECT DISTINCT year FROM films order by year desc',
                 'SELECT DISTINCT year FROM series order by year desc',
             ];
+
         for (let q of yearsQ) {
             const results = await fetchResults(connection, q, []);
             results.map(x => x.year).map(year => {
@@ -170,9 +171,47 @@ async function getFiltersData() {
                 }
             });
         }
-        console.log(filtersData);
 
         return filtersData;
+
+    } catch (error) {
+        console.log('ERROR:', error);
+    } finally {
+        if (connection) {
+            connection.end();
+        }
+    }
+}
+
+async function getSearchData(searchQuery) {
+    let connection = await mysql.createConnection(options);
+    try {
+        
+        const searchResults = {
+            anime: [],
+            dorama: [],
+            series: [],
+            films: []
+        };
+
+        const animeQuery = `SELECT * FROM anime WHERE title LIKE ?`;
+        const animeParams = [`%${searchQuery}%`];
+        searchResults.anime = await fetchResults(connection, animeQuery, animeParams);
+
+        const doramaQuery = `SELECT * FROM dorama WHERE title LIKE ?`;
+        const doramaParams = [`%${searchQuery}%`];
+        searchResults.dorama = await fetchResults(connection, doramaQuery, doramaParams);
+
+        const seriesQuery = `SELECT * FROM series WHERE title LIKE ?`;
+        const seriesParams = [`%${searchQuery}%`];
+        searchResults.series = await fetchResults(connection, seriesQuery, seriesParams);
+
+        const filmsQuery = `SELECT * FROM films WHERE title LIKE ?`;
+        const filmsParams = [`%${searchQuery}%`];
+        searchResults.films = await fetchResults(connection, filmsQuery, filmsParams);
+
+        return searchResults;
+
     } catch (error) {
         console.log('ERROR:', error);
     } finally {
@@ -189,5 +228,6 @@ module.exports = {
     findSerie,
     findMovie,
     getFiltersData,
+    getSearchData
 };
 

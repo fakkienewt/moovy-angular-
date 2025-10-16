@@ -37,6 +37,7 @@ async function parseSeries(page = 1) {
 
             const rating = $el.find('.results-item-rating span').text();
             const year = $el.find('.results-item-year').text();
+            const type = 'serie';
 
             let description = '';
             let genres = [];
@@ -120,7 +121,8 @@ async function parseSeries(page = 1) {
                 episodes: episodes,
                 director: director,
                 actors: actors,
-                author: author
+                author: author, 
+                type: type
             });
         }
 

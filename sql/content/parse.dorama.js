@@ -63,6 +63,7 @@ async function parseDorama(page = 1) {
                 let description = '';
                 let rating = '';
                 let actors = [];
+                const type = 'dorama';
 
                 if (url) {
                     try {
@@ -103,7 +104,7 @@ async function parseDorama(page = 1) {
                         }
 
                     } catch (error) {
-                        console.log('Ошибка при парсинге страницы дорамы:', error.message);
+                        console.log('ERRORR:', error.message);
                     }
                 }
 
@@ -120,7 +121,8 @@ async function parseDorama(page = 1) {
                     time: time,
                     episodes: episodes,
                     countries: countries,
-                    actors: actors
+                    actors: actors, 
+                    type: type
                 });
             }
 

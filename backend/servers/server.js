@@ -125,14 +125,14 @@ app.get('/api/filtered-content', async (req, res) => {
 
         if (genre) {
             if (tableName === 'films' || tableName === 'series' || tableName === 'anime' || tableName === 'dorama') {
-                sql += ` AND genres LIKE '%${genre}%'`; 
+                sql += ` AND genres LIKE '%${genre}%'`;
             } else {
                 sql += ` AND genre LIKE '%${genre}%'`;
             }
         }
 
         if (country && (tableName === 'films' || tableName === 'series' || tableName == 'anime' || tableName === 'dorama')) {
-            sql += ` AND countries LIKE '%${country}%'`; 
+            sql += ` AND countries LIKE '%${country}%'`;
         }
 
         if (year) {
@@ -147,6 +147,17 @@ app.get('/api/filtered-content', async (req, res) => {
     } catch (err) {
         console.error('ERRORR:', err);
         res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/search', async (req, res) => {
+    try {
+        const searchTitle = req.query.title;
+        const results = await connect.getSearchData(searchTitle);
+        res.json(results);
+    } catch (error) {
+        console.log('ERROR:', error);
+        throw error;
     }
 });
 

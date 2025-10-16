@@ -70,4 +70,8 @@ export class Service {
       `${this.baseUrl}/filtered-content?type=${type}&genre=${genre}&country=${country}&year=${year}&page=${page}`
     );
   }
+
+  getSearchData(title: string) {
+    return this.http.get<any>(`${this.baseUrl}/search?title=${title}`);
+  }
 }

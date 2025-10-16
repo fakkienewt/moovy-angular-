@@ -23,6 +23,8 @@ async function parseMovies(page = 1) {
             const element = items[i];
             const $el = $(element);
 
+            const type = 'film';
+
             const title = $el.find('.results-item-title').text().trim();
             const filmUrl = $el.find('.results-item').attr('href');
 
@@ -46,7 +48,7 @@ async function parseMovies(page = 1) {
                 director: [],
                 actors: [],
                 author: [],
-                videoMP4: null
+                type: type
             };
 
             if (filmUrl) {

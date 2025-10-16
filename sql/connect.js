@@ -22,7 +22,8 @@ function initDatabase() {
         countries TEXT,
         director TEXT,
         actors TEXT,
-        author TEXT
+        author TEXT, 
+        type TEXT
     )`;
 
     let films = `
@@ -37,7 +38,8 @@ function initDatabase() {
         countries TEXT,
         director TEXT,
         actors TEXT,
-        author TEXT
+        author TEXT, 
+        type TEXT
     )`;
 
     let series = `
@@ -53,7 +55,8 @@ function initDatabase() {
         countries TEXT,
         director TEXT,
         actors TEXT,
-        author TEXT
+        author TEXT, 
+        type TEXT
     )`;
 
     let anime = `
@@ -69,7 +72,8 @@ function initDatabase() {
         director TEXT,
         genres TEXT,
         status TEXT, 
-        countries TEXT 
+        countries TEXT, 
+        type TEXT
     )`;
 
     let dorama = `
@@ -84,7 +88,8 @@ function initDatabase() {
         genres TEXT,
         countries TEXT,
         status TEXT,
-        actors TEXT
+        actors TEXT, 
+        type TEXT
     )`;
 
     connection.query(movies, function (err, results) {
@@ -120,8 +125,8 @@ async function saveAnime(animeData) {
 
     for (let anime of animeData) {
         const query = `
-        INSERT INTO anime(title, poster, rating, year, description, time, episodes, director, genres, status, countries)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO anime(title, poster, rating, year, description, time, episodes, director, genres, status, countries, type)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -134,8 +139,9 @@ async function saveAnime(animeData) {
             anime.episodes,
             Array.isArray(anime.director) ? anime.director.join(', ') : anime.director,
             Array.isArray(anime.genres) ? anime.genres.join(', ') : anime.genres,
-            anime.status, 
-            anime.countries
+            anime.status,
+            anime.countries, 
+            anime.type
         ];
 
         connection.execute(query, values, function (error, results) {
@@ -150,8 +156,8 @@ async function saveFilm(filmData) {
     let connection = mysql.createConnection(options);
     for (let film of filmData) {
         const query = `
-         INSERT INTO films(title, poster, rating, year, description, genres, author, actors, countries, director)
-         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         INSERT INTO films(title, poster, rating, year, description, genres, author, actors, countries, director, type)
+         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             film.title,
@@ -164,6 +170,7 @@ async function saveFilm(filmData) {
             Array.isArray(film.actors) ? film.actors.join(', ') : film.actors,
             Array.isArray(film.countries) ? film.countries.join(', ') : film.countries,
             Array.isArray(film.director) ? film.director.join(', ') : film.director,
+            film.type
         ];
 
         connection.execute(query, values, function (error, results) {
@@ -179,8 +186,8 @@ async function saveSerie(serieData) {
     let connection = mysql.createConnection(options);
     for (let serie of serieData) {
         const query = `
-        INSERT INTO series(title, poster, rating, year, description, genres, author, countries, director, episodes, actors)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO series(title, poster, rating, year, description, genres, author, countries, director, episodes, actors, type)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             serie.title,
@@ -193,7 +200,8 @@ async function saveSerie(serieData) {
             Array.isArray(serie.countries) ? serie.countries.join(', ') : serie.countries,
             Array.isArray(serie.director) ? serie.director.join(', ') : serie.director,
             serie.episodes,
-            Array.isArray(serie.actors) ? serie.actors.join(', ') : serie.actors
+            Array.isArray(serie.actors) ? serie.actors.join(', ') : serie.actors, 
+            serie.type
         ];
         connection.execute(query, values, function (error, results) {
             if (error) console.log(error);
@@ -207,8 +215,8 @@ async function saveDorama(doramaData) {
     let connection = mysql.createConnection(options);
     for (let dorama of doramaData) {
         const query = `
-        INSERT INTO dorama(title, poster, rating, year, description, genres, countries, episodes, actors, status)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO dorama(title, poster, rating, year, description, genres, countries, episodes, actors, status, type)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             dorama.title,
@@ -220,7 +228,8 @@ async function saveDorama(doramaData) {
             Array.isArray(dorama.countries) ? dorama.countries.join(', ') : dorama.countries,
             dorama.episodes,
             Array.isArray(dorama.actors) ? dorama.actors.join(', ') : dorama.actors,
-            dorama.status
+            dorama.status, 
+            dorama.type
         ];
         connection.execute(query, values, function (error, results) {
             if (error) console.log(error);
@@ -234,8 +243,8 @@ async function saveMovie(movieData) {
     let connection = mysql.createConnection(options);
     for (let movie of movieData) {
         const query = `
-        INSERT INTO movies(title, poster, rating, year, description, genres, author, actors, countries, director)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO movies(title, poster, rating, year, description, genres, author, actors, countries, director, type)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const values = [
             movie.title,
@@ -247,7 +256,8 @@ async function saveMovie(movieData) {
             Array.isArray(movie.author) ? movie.author.join(', ') : movie.author,
             Array.isArray(movie.actors) ? movie.actors.join(', ') : movie.actors,
             Array.isArray(movie.countries) ? movie.countries.join(', ') : movie.countries,
-            Array.isArray(movie.director) ? movie.director.join(', ') : movie.director
+            Array.isArray(movie.director) ? movie.director.join(', ') : movie.director, 
+            movie.type
         ];
 
         connection.execute(query, values, function (error, results) {

@@ -58,6 +58,14 @@ async function fillDatabase() {
         await connect.saveMovie(movieData);
         console.log('база данных с новыми фильмами заполнена!');
 
+        console.log('УДАЛЯЕМ ДУБЛИКАТЫ ДОРАМ...');
+        await connect.deleteDoramaDublicates();
+        console.log('Дубликаты удалены!');
+
+        console.log('УДАЛЯЕМ ДУБЛИКАТЫ АНИМЕ...');
+        await connect.deleteAnimeDublicates();
+        console.log('Дубликаты удалены!');
+
     } catch (error) {
         console.log('ОШИБКА:', error);
         throw error;

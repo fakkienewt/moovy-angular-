@@ -1,4 +1,4 @@
-import { Component, OnInit, ɵDeferBlockConfig } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Service } from '../../services/service';
 import { Filter } from '../../models.ts/filter.model';
 import { Film } from '../../models.ts/film.model';
@@ -132,24 +132,40 @@ export class Filters implements OnInit {
     if (this.selectedType === 'anime') {
       this.router.navigate([`anime/${film.id}`], {
         state: { anime: film }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     }
 
     if (this.selectedType === 'dorama') {
       this.router.navigate([`dorama/${film.id}`], {
         state: { dorama: film }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     }
 
     if (this.selectedType === 'serie') {
       this.router.navigate([`series/${film.id}`], {
         state: { series: film }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     }
 
     if (this.selectedType === 'film') {
       this.router.navigate([`films/${film.id}`], {
         state: { movie: film }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     }
   }

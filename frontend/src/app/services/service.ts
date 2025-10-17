@@ -74,4 +74,8 @@ export class Service {
   getSearchData(title: string) {
     return this.http.get<any>(`${this.baseUrl}/search?title=${title}`);
   }
+
+  getSimilarFilms(genres: string | undefined, type: string | undefined): Observable<Film[]> {
+    return this.http.get<Film[]>(`${this.baseUrl}/similar?genres=${genres}&type=${type}`);
+  }
 }

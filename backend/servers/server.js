@@ -161,6 +161,17 @@ app.get('/api/search', async (req, res) => {
     }
 });
 
+app.get('/api/similar', async (req, res) => {
+    try {
+        const type = req.query.type;
+        const genres = req.query.genres;
+        const results = await connect.getSimilarFilms(genres, type);
+        res.json(results);
+    } catch (err) {
+        console.log('ERROOR:', err);
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
 });

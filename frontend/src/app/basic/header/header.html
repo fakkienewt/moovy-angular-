@@ -15,7 +15,7 @@
         <div class="search-section">
             <div class="search-container">
                 <input type="text"
-                    placeholder="Найти фильм..."
+                    placeholder="Найти фильм, сериал..."
                     class="search-input"
                     #inputValue />
                 <button class="search-btn"
@@ -30,41 +30,52 @@
                 </button>
             </div>
 
-            <div class="search-results"
-                *ngIf="searchResults && searchResults.length === 0">
-                <div class="results-header">
-                    <span class="results-count">Найдено фильмов: 0</span>
-                    <button class="close-btn"
-                        (click)="closeSearchWindow()">×</button>
+            <div class="search-results-modern"
+                *ngIf="searchResults">
+                <div class="results-header-modern">
+                    <div class="results-info">
+                        <h3 class="results-title">Результаты поиска</h3>
+                        <div class="results-count">{{searchResults.length}} найдено</div>
+                    </div>
+                    <button class="close-btn-modern"
+                        (click)="closeSearchWindow()">
+                        <svg width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none">
+                            <path d="M18 6L6 18M6 6l12 12"
+                                stroke="#ff85a2"
+                                stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
                 </div>
 
-                <div class="results-list">
-                    <div class="no-results-content">
+                <div class="results-content">
+                    <div *ngIf="searchResults.length === 0"
+                        class="no-results-modern">
+                        <div class="no-results-icon">🔍</div>
                         <div class="no-results-text">Ничего не найдено</div>
                         <div class="no-results-hint">Попробуйте изменить запрос</div>
                     </div>
-                </div>
-            </div>
 
-            <div class="search-results"
-                *ngIf="searchResults && searchResults.length > 0">
-                <div class="results-header">
-                    <span class="results-count">Найдено фильмов: {{searchResults.length}}</span>
-                    <button class="close-btn"
-                        (click)="closeSearchWindow()">×</button>
-                </div>
-
-                <div class="results-list">
-                    <div class="result-card"
-                        *ngFor="let item of searchResults"
-                        (click)="onTheNewPage(item)">
-                        <img [src]="getPosterUrlFilm(item.poster)"
-                            class="result-poster">
-                        <div class="result-info">
-                            <div class="result-title">{{ item.title }}</div>
-                            <div class="result-year">{{ item.year }}</div>
+                    <div *ngIf="searchResults.length > 0"
+                        class="results-grid">
+                        <div class="result-card-modern"
+                            *ngFor="let item of searchResults"
+                            (click)="onTheNewPage(item)">
+                            <div class="result-poster-modern">
+                                <img [src]="getPosterUrlFilm(item.poster)"
+                                    class="poster-image-modern">
+                                <div class="result-rating-modern">{{ item.rating || '—' }}</div>
+                            </div>
+                            <div class="result-info-modern">
+                                <h4 class="result-title-modern">{{ item.title }}</h4>
+                                <div class="result-meta">
+                                    <span class="result-year">{{ item.year }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="result-rating">{{ item.rating }}</div>
                     </div>
                 </div>
             </div>

@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="movie-info">
-                    <h1 class="movie-title">{{ anime?.title }}</h1>
+                    <h1 class="movie-title-main">{{ anime?.title }}</h1>
 
                     <div class="movie-details-enhanced">
                         <div class="details-column">
@@ -145,46 +145,44 @@
         <h3 class="section-title similar-title">Похожие аниме</h3>
         <div class="similar-section">
             <div class="vertical-grid">
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">9.2</div>
+                <ng-container *ngIf="loadingSimilar">
+                    <div *ngFor="let i of [1,2,3,4]"
+                        class="movie-card-vertical empty">
+                        <div class="poster-wrapper">
+                            <div class="empty-poster"></div>
+                        </div>
+                        <div class="movie-info">
+                            <div class="empty-title"></div>
+                            <div class="empty-year"></div>
+                        </div>
                     </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Атака титанов</h3>
-                        <p class="vertical-movie-year">2013</p>
+                </ng-container>
+
+                <ng-container *ngIf="!loadingSimilar">
+                    <div *ngFor="let similar of similar_content"
+                        class="movie-card-vertical" (click)="onTheNextPageS(similar)">
+                        <div class="poster-wrapper">
+                            <img [src]="getPosterUrl(similar.poster)"
+                                class="poster-image">
+                            <div class="movie-rating">{{ similar.rating }}</div>
+                        </div>
+                        <div class="movie-info">
+                            <h3 class="movie-title">{{ similar.title }}</h3>
+                            <p class="movie-year">{{ similar.year }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">8.3</div>
+
+                    <div *ngIf="similar_content.length === 0"
+                        class="movie-card-vertical empty">
+                        <div class="poster-wrapper">
+                            <div class="empty-poster"></div>
+                        </div>
+                        <div class="movie-info">
+                            <h3 class="movie-title">Нет похожих</h3>
+                            <p class="movie-year">—</p>
+                        </div>
                     </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Наруто</h3>
-                        <p class="vertical-movie-year">2002</p>
-                    </div>
-                </div>
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">8.7</div>
-                    </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Ван-Пис</h3>
-                        <p class="vertical-movie-year">1999</p>
-                    </div>
-                </div>
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">9.1</div>
-                    </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Ходячий замок</h3>
-                        <p class="vertical-movie-year">2004</p>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </div>
 

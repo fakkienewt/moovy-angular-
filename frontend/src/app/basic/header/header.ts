@@ -28,6 +28,13 @@ export class Header {
   }
 
   onSearchClick(value: string): void {
+
+    if (!value || value.trim().length === 0) {
+      this.searchResults = null;
+      this.toggleBodyScroll(true);
+      return;
+    }
+
     this.toggleBodyScroll(false);
     this.service.getSearchData(value).subscribe({
       next: (data) => {
@@ -73,20 +80,36 @@ export class Header {
     if (item.type === 'film') {
       this.router.navigate([`films/${item.id}`], {
         state: { movie: item }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     } else if (item.type === 'anime') {
       this.router.navigate([`anime/${item.id}`], {
         state: { anime: item }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     } else if (item.type === 'dorama') {
       this.router.navigate([`dorama/${item.id}`], {
         state: { dorama: item }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     } else if (item.type === 'serie') {
       this.router.navigate([`series/${item.id}`], {
         state: { series: item }
+      }).then(() => {
+        window.location.reload();
+      }).then(() => {
+        window.scrollTo(0, 0);
       });
     }
-    this.closeSearchWindow()
+    this.closeSearchWindow();
   }
 }

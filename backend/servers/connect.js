@@ -184,9 +184,11 @@ async function getFiltersData() {
 }
 
 async function getSearchData(searchQuery) {
+
     let connection = await mysql.createConnection(options);
+
     try {
-        
+
         const searchResults = {
             anime: [],
             dorama: [],
@@ -221,6 +223,48 @@ async function getSearchData(searchQuery) {
     }
 }
 
+async function getSimilarFilms(genres, type) {
+    let connection = await mysql.createConnection(options);
+    let genresArr = genres.split(',').map(genre => genre.trim());
+
+    try {
+        const tableMap = {
+            'film': 'films',
+            'anime': 'anime', 
+            'dorama': 'dorama',
+            'serie': 'series'
+        };
+        
+        const tableName = tableMap[type] || type;
+        
+        const query = `SELECT * FROM ${tableName} ORDER BY RAND()`;
+        const results = await fetchResults(connection, query, []);
+        
+        let similarResults = [];
+
+        for (let item of results) {
+            let itemGenres = item.genres.split(',').map(g => g.trim());
+
+            for (let genre of genresArr) {
+                if (itemGenres.includes(genre)) {
+                    similarResults.push(item);
+                    break;
+                }
+            }
+        }
+
+        return similarResults.slice(0, 4);
+
+    } catch (error) {
+        console.log('ERROR:', error);
+        return [];
+    } finally {
+        if (connection) {
+            connection.end();
+        }
+    }
+}
+
 module.exports = {
     findDorama,
     findAnime,
@@ -228,6 +272,7 @@ module.exports = {
     findSerie,
     findMovie,
     getFiltersData,
-    getSearchData
+    getSearchData,
+    getSimilarFilms
 };
 

@@ -16,7 +16,7 @@ async function parseSeries(page = 1) {
 
         const series = [];
 
-        const items = $('.results-item-wrap').slice(0, 24);
+        const items = $('.results-item-wrap').slice(0, 44);
 
         for (let i = 0; i < items.length; i++) {
             const element = items[i];

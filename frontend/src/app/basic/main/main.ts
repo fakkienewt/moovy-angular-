@@ -230,24 +230,32 @@ export class Main implements OnInit {
   onClickPageFilm(film: Film): void {
     this.router.navigate([`films/${film.id}`], {
       state: { movie: film }
+    }).then(() => {
+      window.scrollTo(0, 0);
     });
   }
 
   onClickPageSeries(series: Film) {
     this.router.navigate([`series/${series.id}`], {
       state: { series: series }
+    }).then(() => {
+      window.scrollTo(0, 0);
     });
   }
 
   onClickPageDorama(dorama: Film) {
     this.router.navigate([`dorama/${dorama.id}`], {
       state: { dorama: dorama }
+    }).then(() => {
+      window.scrollTo(0, 0);
     });
   }
 
   onClickPageAnime(anime: Film) {
     this.router.navigate([`anime/${anime.id}`], {
       state: { anime: anime }
+    }).then(() => {
+      window.scrollTo(0, 0);
     });
   }
 }

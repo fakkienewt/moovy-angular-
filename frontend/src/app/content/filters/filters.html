@@ -3,7 +3,7 @@
         <div class="filters-header">
             <div class="header-content">
                 <h1 class="filters-title">Расширенный поиск</h1>
-                <p class="filters-subtitle">Точная настройка параметров</p>
+                <p class="filters-subtitle">Найдите именно то, что хотите посмотреть</p>
             </div>
         </div>
 
@@ -58,7 +58,7 @@
 
             <div class="filter-section">
                 <div class="section-header">
-                    <h3 class="section-title">Параметры фильтрации</h3>
+                    <h3 class="section-title">Параметры поиска</h3>
                 </div>
                 <div class="filters-row">
                     <div class="filter-item">
@@ -94,11 +94,11 @@
             <div class="actions-section">
                 <button class="action-btn secondary"
                     (click)="onReset()">
-                    <span class="btn-text">Очистить всё</span>
+                    <span class="btn-text">Сбросить</span>
                 </button>
                 <button class="action-btn primary"
                     (click)="onApply()">
-                    <span class="btn-text">Найти</span>
+                    <span class="btn-text">Применить фильтры</span>
                 </button>
             </div>
         </div>
@@ -107,11 +107,20 @@
             *ngIf="foundedContent.length > 0">
             <div class="results-header-modern">
                 <div class="results-info">
-                    <h2 class="results-title">Результаты поиска</h2>
+                    <h2 class="results-title">Найдено контента</h2>
                     <div class="results-stats">
                         <span class="results-count">{{foundedContent.length}}</span>
-                        <span class="results-label">найдено</span>
+                        <span class="results-label">результатов</span>
                     </div>
+                </div>
+                <div class="sort-control">
+                    <label class="sort-label">Сортировка:</label>
+                    <select class="sort-select">
+                        <option value="default">По умолчанию</option>
+                        <option value="rating_desc">По рейтингу</option>
+                        <option value="year_desc">По году (новые)</option>
+                        <option value="year_asc">По году (старые)</option>
+                    </select>
                 </div>
             </div>
             <div class="vertical-grid">
@@ -121,7 +130,7 @@
                     <div class="poster-wrapper">
                         <img [src]="getPosterUrlFilm(film.poster)"
                             class="poster-image">
-                        <div class="movie-rating">{{ film.rating }}</div>
+                        <div class="movie-rating">{{ film.rating || '—' }}</div>
                     </div>
                     <div class="movie-info">
                         <h3 class="movie-title">{{ film.title }}</h3>

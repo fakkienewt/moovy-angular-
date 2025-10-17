@@ -140,7 +140,7 @@ async function saveAnime(animeData) {
             Array.isArray(anime.director) ? anime.director.join(', ') : anime.director,
             Array.isArray(anime.genres) ? anime.genres.join(', ') : anime.genres,
             anime.status,
-            anime.countries, 
+            anime.countries,
             anime.type
         ];
 
@@ -200,7 +200,7 @@ async function saveSerie(serieData) {
             Array.isArray(serie.countries) ? serie.countries.join(', ') : serie.countries,
             Array.isArray(serie.director) ? serie.director.join(', ') : serie.director,
             serie.episodes,
-            Array.isArray(serie.actors) ? serie.actors.join(', ') : serie.actors, 
+            Array.isArray(serie.actors) ? serie.actors.join(', ') : serie.actors,
             serie.type
         ];
         connection.execute(query, values, function (error, results) {
@@ -228,7 +228,7 @@ async function saveDorama(doramaData) {
             Array.isArray(dorama.countries) ? dorama.countries.join(', ') : dorama.countries,
             dorama.episodes,
             Array.isArray(dorama.actors) ? dorama.actors.join(', ') : dorama.actors,
-            dorama.status, 
+            dorama.status,
             dorama.type
         ];
         connection.execute(query, values, function (error, results) {
@@ -256,7 +256,7 @@ async function saveMovie(movieData) {
             Array.isArray(movie.author) ? movie.author.join(', ') : movie.author,
             Array.isArray(movie.actors) ? movie.actors.join(', ') : movie.actors,
             Array.isArray(movie.countries) ? movie.countries.join(', ') : movie.countries,
-            Array.isArray(movie.director) ? movie.director.join(', ') : movie.director, 
+            Array.isArray(movie.director) ? movie.director.join(', ') : movie.director,
             movie.type
         ];
 
@@ -271,12 +271,75 @@ async function saveMovie(movieData) {
     console.log(`добавлено ${movieData.length} новых фильмов`);
 }
 
+async function deleteDoramaDublicates() {
+    let connection = mysql.createConnection(options);
+
+    const deleteQuery = `
+        DELETE d1 FROM dorama d1
+        INNER JOIN dorama d2 
+        WHERE 
+            d1.id > d2.id AND 
+            d1.title = d2.title
+    `;
+
+    connection.query(deleteQuery, function (err, result) {
+        if (err) {
+            console.log('Ошибка при удалении дубликатов:', err.message);
+        } else {
+            console.log(`Удалено дубликатов: ${result.affectedRows}`);
+
+            const resetQuery = `ALTER TABLE dorama AUTO_INCREMENT = 1`;
+            connection.query(resetQuery, function (err) {
+                if (err) {
+                    console.log('Ошибка при сбросе AUTO_INCREMENT:', err.message);
+                } else {
+                    console.log("AUTO_INCREMENT сброшен");
+                }
+                connection.end();
+            });
+        }
+    });
+}
+
+
+async function deleteAnimeDublicates() {
+    let connection = mysql.createConnection(options);
+
+    const deleteQuery = `
+        DELETE d1 FROM anime d1
+        INNER JOIN anime d2 
+        WHERE 
+            d1.id > d2.id AND 
+            d1.title = d2.title
+    `;
+
+    connection.query(deleteQuery, function (err, result) {
+        if (err) {
+            console.log('Ошибка при удалении дубликатов:', err.message);
+        } else {
+            console.log(`Удалено дубликатов: ${result.affectedRows}`);
+
+            const resetQuery = `ALTER TABLE anime AUTO_INCREMENT = 1`;
+            connection.query(resetQuery, function (err) {
+                if (err) {
+                    console.log('Ошибка при сбросе AUTO_INCREMENT:', err.message);
+                } else {
+                    console.log("AUTO_INCREMENT сброшен");
+                }
+                connection.end();
+            });
+        }
+    });
+}
+
 module.exports = {
     initDatabase,
     saveMovie,
     saveDorama,
     saveSerie,
     saveAnime,
-    saveFilm
+    saveFilm,
+    deleteDoramaDublicates,
+    deleteAnimeDublicates
 };
 

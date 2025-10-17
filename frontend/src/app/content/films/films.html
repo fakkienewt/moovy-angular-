@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="movie-info">
-                    <h1 class="movie-title">{{ movie?.title }}</h1>
+                    <h1 class="movie-title-main">{{ movie?.title }}</h1>
 
                     <div class="movie-details-enhanced">
                         <div class="details-column">
@@ -145,46 +145,33 @@
         <h3 class="section-title similar-title">Похожие фильмы</h3>
         <div class="similar-section">
             <div class="vertical-grid">
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">8.6</div>
+                <ng-container *ngIf="loadingSimilar">
+                    <div *ngFor="let i of [1,2,3,4]"
+                        class="movie-card-vertical empty">
+                        <div class="poster-wrapper">
+                            <div class="empty-poster"></div>
+                        </div>
+                        <div class="movie-info">
+                            <div class="empty-title"></div>
+                            <div class="empty-year"></div>
+                        </div>
                     </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Интерстеллар</h3>
-                        <p class="vertical-movie-year">2014</p>
+                </ng-container>
+
+                <ng-container *ngIf="!loadingSimilar">
+                    <div *ngFor="let similar of similar_content"
+                        class="movie-card-vertical" (click)="onTheNextPageS(similar)">
+                        <div class="poster-wrapper">
+                            <img [src]="getPosterUrl(similar.poster)"
+                                class="poster-image">
+                            <div class="movie-rating">{{ similar.rating }}</div>
+                        </div>
+                        <div class="movie-info">
+                            <h3 class="movie-title">{{ similar.title }}</h3>
+                            <p class="movie-year">{{ similar.year }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">8.3</div>
-                    </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Остров проклятых</h3>
-                        <p class="vertical-movie-year">2010</p>
-                    </div>
-                </div>
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">7.9</div>
-                    </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Дюнкерк</h3>
-                        <p class="vertical-movie-year">2017</p>
-                    </div>
-                </div>
-                <div class="movie-card-vertical">
-                    <div class="vertical-poster-wrapper">
-                        <div class="empty-poster"></div>
-                        <div class="vertical-rating">8.1</div>
-                    </div>
-                    <div class="vertical-movie-info">
-                        <h3 class="vertical-movie-title">Начало</h3>
-                        <p class="vertical-movie-year">2010</p>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </div>
 

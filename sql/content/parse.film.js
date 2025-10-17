@@ -17,7 +17,7 @@ async function parseFilms(page = 1) {
         const $ = cheerio.load(response.data);
         const films = [];
 
-        const items = $('.results-item-wrap').slice(0, 20);
+        const items = $('.results-item-wrap').slice(0, 40);
 
         for (let i = 0; i < items.length; i++) {
             const element = items[i];

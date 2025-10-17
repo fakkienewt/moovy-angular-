@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Filters } from './content/filters/filters';
 import { FormsModule } from '@angular/forms';
 import { FilterPagination } from './paginations/filter-pagination/filter-pagination';
+import { Anime } from './content/anime/anime';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FilterPagination } from './paginations/filter-pagination/filter-paginat
     Dorama,
     Films,
     Series,
+    Anime,
     MainPagination,
     NewFilms,
     Filters,

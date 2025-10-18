@@ -62,7 +62,6 @@
                 </div>
                 <div class="filters-row">
                     <div class="filter-item">
-                        <label class="filter-name">Жанр</label>
                         <select class="filter-select"
                             [(ngModel)]="selectedGenre">
                             <option value="">Все жанры</option>
@@ -71,7 +70,6 @@
                         </select>
                     </div>
                     <div class="filter-item">
-                        <label class="filter-name">Год выпуска</label>
                         <select class="filter-select"
                             [(ngModel)]="selectedYear">
                             <option value="">Все годы</option>
@@ -80,7 +78,6 @@
                         </select>
                     </div>
                     <div class="filter-item">
-                        <label class="filter-name">Страна</label>
                         <select class="filter-select"
                             [(ngModel)]="selectedCountry">
                             <option value="">Все страны</option>
@@ -115,7 +112,9 @@
                 </div>
                 <div class="sort-control">
                     <label class="sort-label">Сортировка:</label>
-                    <select class="sort-select">
+                    <select class="sort-select"
+                        [(ngModel)]="selectedSort"
+                        (ngModelChange)="onSortChange($event)">
                         <option value="default">По умолчанию</option>
                         <option value="rating_desc">По рейтингу</option>
                         <option value="year_desc">По году (новые)</option>

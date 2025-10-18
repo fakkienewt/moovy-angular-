@@ -160,7 +160,8 @@
 
                 <ng-container *ngIf="!loadingSimilar">
                     <div *ngFor="let similar of similar_content"
-                        class="movie-card-vertical" (click)="onTheNextPageS(similar)">
+                        class="movie-card-vertical"
+                        (click)="onTheNextPageS(similar)">
                         <div class="poster-wrapper">
                             <img [src]="getPosterUrl(similar.poster)"
                                 class="poster-image">

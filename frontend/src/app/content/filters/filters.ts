@@ -19,6 +19,8 @@ export class Filters implements OnInit {
   selectedYear: string = '';
   selectedCountry: string = '';
 
+  selectedSort: string = 'default';
+
   constructor(
     private service: Service,
     public router: Router
@@ -50,6 +52,10 @@ export class Filters implements OnInit {
       return;
     }
 
+    if (!this.selectedType) {
+      return;
+    }
+
     this.currentPage = 1;
     this.hasSearched = true;
 
@@ -58,7 +64,8 @@ export class Filters implements OnInit {
       this.selectedGenre,
       this.selectedCountry,
       this.selectedYear,
-      this.currentPage
+      this.currentPage,
+      this.selectedSort
     ).subscribe({
       next: (data: Film[]) => {
         this.foundedContent = data;
@@ -76,7 +83,8 @@ export class Filters implements OnInit {
       this.selectedGenre,
       this.selectedCountry,
       this.selectedYear,
-      this.currentPage + 1
+      this.currentPage + 1,
+      this.selectedSort
     ).subscribe({
       next: (nextPageData: Film[]) => {
         this.hasMoreContent = nextPageData.length > 0;
@@ -98,7 +106,8 @@ export class Filters implements OnInit {
       this.selectedGenre,
       this.selectedCountry,
       this.selectedYear,
-      this.currentPage
+      this.currentPage,
+      this.selectedSort
     ).subscribe({
       next: (data: Film[]) => {
         this.foundedContent = data;
@@ -163,10 +172,32 @@ export class Filters implements OnInit {
       this.router.navigate([`films/${film.id}`], {
         state: { movie: film }
       }).then(() => {
-        window.location.reload();
-      }).then(() => {
         window.scrollTo(0, 0);
-      });
+      }).then(() => {
+        window.location.reload();
+      })
     }
+  }
+
+  onSortChange(sortType: string): void {
+    this.selectedSort = sortType;
+    this.currentPage = 1;
+
+    this.service.getFilteredData(
+      this.selectedType,
+      this.selectedGenre,
+      this.selectedCountry,
+      this.selectedYear,
+      this.currentPage,
+      this.selectedSort
+    ).subscribe({
+      next: (data: Film[]) => {
+        this.foundedContent = data;
+        this.checkNextPage();
+      },
+      error: (error) => {
+        console.error('Ошибка при сортировке:', error);
+      }
+    });
   }
 }

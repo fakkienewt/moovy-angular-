@@ -1,0 +1,104 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 50%, #fff0f5 100%);
+    color: #ff85a2;
+    padding: 2rem;
+    margin-top: auto;
+    width: 1015px;
+    height: 160px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #ffd1dc;
+    border-radius: 30px 30px 0 0;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+    border-top: 3px solid #ffd1dc;
+    margin-top: 10px;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 2;
+}
+
+.social-link {
+    text-decoration: none;
+}
+
+.social-button {
+    padding: 10px 24px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    border: 2px solid #ff85a2;
+    color: #ff85a2;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    animation: pulse 3s infinite;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.social-button.tiktok {
+    animation-delay: 0.5s;
+}
+
+.social-button.linkedin {
+    animation-delay: 1s;
+}
+
+.social-button.github {
+    animation-delay: 1.5s;
+}
+
+.footer-text {
+    font-size: 14px;
+    color: #ff85a2;
+    z-index: 2;
+    animation: fadeIn 1s ease-out;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
+    }
+
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.social-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
+    background-color: white;
+    border-color: #ff6b8b;
+}

@@ -60,9 +60,9 @@ export class Dorama implements OnInit {
     this.router.navigate([`dorama/${item.id}`], {
       state: { dorama: item }
     }).then(() => {
-      window.location.reload();
-    }).then(() => {
       window.scrollTo(0, 0);
+    }).then(() => {
+      window.location.reload();
     });
   }
 }

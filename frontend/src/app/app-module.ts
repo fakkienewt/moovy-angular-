@@ -19,6 +19,9 @@ import { Filters } from './content/filters/filters';
 import { FormsModule } from '@angular/forms';
 import { FilterPagination } from './paginations/filter-pagination/filter-pagination';
 import { Anime } from './content/anime/anime';
+import { Profile } from './profile/profile/profile';
+import { SignUp } from './profile/sign.up/sign.up';
+import { SignIn } from './profile/sign-in/sign-in';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { Anime } from './content/anime/anime';
     NewFilms,
     Filters,
     FilterPagination,
+    Profile,
+    SignUp,
+    SignIn,
   ],
   imports: [
     CommonModule,

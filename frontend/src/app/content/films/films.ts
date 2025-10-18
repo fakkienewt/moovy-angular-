@@ -62,9 +62,9 @@ export class Films implements OnInit {
     this.router.navigate([`films/${item.id}`], {
       state: { movie: item }
     }).then(() => {
-      window.location.reload();
+      window.scrollTo(0, 0);
     }).then(() => {
-      window.scrollTo(0, 0); 
-    });
+      window.location.reload();
+    })
   }
 }

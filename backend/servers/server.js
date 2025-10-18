@@ -107,7 +107,7 @@ app.get('/api/filters', async (req, res) => {
 
 app.get('/api/filtered-content', async (req, res) => {
     try {
-        const { type, genre, country, year, page = 1 } = req.query;
+        const { type, genre, country, year, page = 1, sort = 'default' } = req.query;
         const currentPage = parseInt(page);
         const countOnPage = 20;
         const offset = countOnPage * (currentPage - 1);
@@ -137,6 +137,22 @@ app.get('/api/filtered-content', async (req, res) => {
 
         if (year) {
             sql += ` AND year = '${year}'`;
+        }
+
+        switch (sort) {
+            case 'rating_desc':
+                sql += ' ORDER BY rating DESC';
+                break;
+            case 'year_desc':
+                sql += ' ORDER BY year DESC';
+                break;
+            case 'year_asc':
+                sql += ' ORDER BY year ASC';
+                break;
+            case 'default':
+            default:
+                sql += ' ORDER BY id DESC'; 
+                break;
         }
 
         sql += ` LIMIT ${countOnPage} OFFSET ${offset}`;

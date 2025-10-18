@@ -62,6 +62,8 @@ export class Series implements OnInit {
       state: { series: item }
     }).then(() => {
       window.scrollTo(0, 0);
-    });
+    }).then(() => {
+      window.location.reload();
+    })
   }
 }

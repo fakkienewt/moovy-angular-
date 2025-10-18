@@ -60,9 +60,9 @@ export class Anime implements OnInit {
     this.router.navigate([`anime/${item.id}`], {
       state: { anime: item }
     }).then(() => {
-      window.location.reload();
-    }).then(() => {
       window.scrollTo(0, 0);
+    }).then(() => {
+      window.location.reload();
     });
   }
 }

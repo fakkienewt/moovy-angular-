@@ -81,33 +81,33 @@ export class Header {
       this.router.navigate([`films/${item.id}`], {
         state: { movie: item }
       }).then(() => {
-        window.location.reload();
-      }).then(() => {
         window.scrollTo(0, 0);
+      }).then(() => {
+        window.location.reload();
       });
     } else if (item.type === 'anime') {
       this.router.navigate([`anime/${item.id}`], {
         state: { anime: item }
       }).then(() => {
-        window.location.reload();
-      }).then(() => {
         window.scrollTo(0, 0);
+      }).then(() => {
+        window.location.reload();
       });
     } else if (item.type === 'dorama') {
       this.router.navigate([`dorama/${item.id}`], {
         state: { dorama: item }
       }).then(() => {
-        window.location.reload();
-      }).then(() => {
         window.scrollTo(0, 0);
+      }).then(() => {
+        window.location.reload();
       });
     } else if (item.type === 'serie') {
       this.router.navigate([`series/${item.id}`], {
         state: { series: item }
       }).then(() => {
-        window.location.reload();
-      }).then(() => {
         window.scrollTo(0, 0);
+      }).then(() => {
+        window.location.reload();
       });
     }
     this.closeSearchWindow();

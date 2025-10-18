@@ -65,9 +65,9 @@ export class Service {
     return this.http.get<Filter>(`${this.baseUrl}/filters`);
   }
 
-  getFilteredData(type: string, genre: string, country: string, year: string, page: number = 1): Observable<Film[]> {
+  getFilteredData(type: string, genre: string, country: string, year: string, page: number = 1, sort: string = 'default'): Observable<Film[]> {
     return this.http.get<Film[]>(
-      `${this.baseUrl}/filtered-content?type=${type}&genre=${genre}&country=${country}&year=${year}&page=${page}`
+      `${this.baseUrl}/filtered-content?type=${type}&genre=${genre}&country=${country}&year=${year}&page=${page}&sort=${sort}`
     );
   }
 

@@ -92,6 +92,23 @@ function initDatabase() {
         type TEXT
     )`;
 
+    let users = `
+        CREATE TABLE if not exists users (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        email VARCHAR(255) UNIQUE NOT NULL, 
+        password VARCHAR(100) NOT NULL,
+        nickname TEXT, 
+        image TEXT, 
+        favourites TEXT, 
+        watch_later TEXT, 
+        comments TEXT
+)`;
+
+    connection.query(users, function (err, results) {
+        if (err) console.log(err);
+        else console.log('таблица users создана');
+    });
+
     connection.query(movies, function (err, results) {
         if (err) console.log(err);
         else console.log("таблица movies создана");
@@ -182,6 +199,7 @@ async function saveFilm(filmData) {
     connection.end();
     console.log(`добавлено ${filmData.length} фильмов`);
 }
+
 async function saveSerie(serieData) {
     let connection = mysql.createConnection(options);
     for (let serie of serieData) {
@@ -300,7 +318,6 @@ async function deleteDoramaDublicates() {
         }
     });
 }
-
 
 async function deleteAnimeDublicates() {
     let connection = mysql.createConnection(options);

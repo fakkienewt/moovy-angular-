@@ -22,7 +22,6 @@
         </div>
     </div>
 </div>
-
 <section class="cute-vertical-movies"
     *ngIf="activeTab === 'films'">
     <div class="vertical-grid">
@@ -38,7 +37,6 @@
                 </div>
             </div>
         </ng-container>
-
         <ng-container *ngIf="!loading_pagination && !loadingFilms">
             <div *ngFor="let film of films"
                 class="movie-card-vertical">
@@ -57,7 +55,6 @@
     </div>
     <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
 </section>
-
 <section class="cute-vertical-movies"
     *ngIf="activeTab === 'series'">
     <div class="vertical-grid">
@@ -73,7 +70,6 @@
                 </div>
             </div>
         </ng-container>
-
         <ng-container *ngIf="!loading_pagination">
             <ng-container *ngIf="loadingSeries">
                 <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
@@ -87,7 +83,6 @@
                     </div>
                 </div>
             </ng-container>
-
             <ng-container *ngIf="!loadingSeries">
                 <div *ngFor="let series of seriesList"
                     class="movie-card-vertical">
@@ -107,7 +102,6 @@
     </div>
     <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
 </section>
-
 <section class="cute-vertical-movies"
     *ngIf="activeTab === 'dorama'">
     <div class="vertical-grid">
@@ -123,7 +117,6 @@
                 </div>
             </div>
         </ng-container>
-
         <ng-container *ngIf="!loading_pagination">
             <ng-container *ngIf="loadingDorama">
                 <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
@@ -137,7 +130,6 @@
                     </div>
                 </div>
             </ng-container>
-
             <ng-container *ngIf="!loadingDorama">
                 <div *ngFor="let d of dorama"
                     class="movie-card-vertical">
@@ -157,7 +149,6 @@
     </div>
     <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
 </section>
-
 <section class="cute-vertical-movies"
     *ngIf="activeTab === 'anime'">
     <div class="vertical-grid">
@@ -173,7 +164,6 @@
                 </div>
             </div>
         </ng-container>
-
         <ng-container *ngIf="!loading_pagination">
             <ng-container *ngIf="loadingAnime">
                 <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
@@ -187,7 +177,6 @@
                     </div>
                 </div>
             </ng-container>
-
             <ng-container *ngIf="!loadingAnime">
                 <div *ngFor="let a of anime"
                     class="movie-card-vertical">
@@ -207,7 +196,6 @@
     </div>
     <app-main-pagination (pageChanged)="onPageChanged($event)"></app-main-pagination>
 </section>
-
 <section class="cute-vertical-movies"
     *ngIf="activeTab === 'filters'">
     <app-filters></app-filters>

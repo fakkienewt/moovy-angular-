@@ -28,7 +28,6 @@
 }
 
 .poster-section .poster-wrapper {
-    position: relative;
     width: 240px;
     height: 340px;
     border-radius: 16px;
@@ -179,7 +178,6 @@
     border-radius: 16px;
     padding: 20px;
     border: 2px solid #ffd1dc;
-    flex: 1;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.1);
@@ -298,7 +296,6 @@
     margin: 0 0 20px 0;
     font-weight: 700;
     text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.2);
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
 }
 
 .vertical-grid {
@@ -343,7 +340,6 @@
 
 .movie-title {
     overflow: hidden;
-    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
     font-size: 16px;
     font-weight: bold;
     color: #ff85a2;
@@ -354,7 +350,6 @@
 }
 
 .movie-year {
-    font-family: 'Arial', sans-serif;
     font-size: 14px;
     color: #ff9dbb;
     margin: 0;
@@ -415,7 +410,6 @@
     padding: 16px 20px;
     border: 2px solid #ffd1dc;
     border-radius: 16px;
-    font-family: inherit;
     font-size: 15px;
     box-sizing: border-box;
     background: #fffafb;

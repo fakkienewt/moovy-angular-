@@ -8,7 +8,6 @@
                             class="movie-poster">
                         <div class="movie-rating">{{ dorama?.rating }}</div>
                     </div>
-
                     <div class="action-buttons">
                         <button class="btn-watch">
                             <svg width="20"
@@ -51,7 +50,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="movie-info">
                     <h1 class="movie-title-main">{{ dorama?.title }}</h1>
 
@@ -70,7 +68,6 @@
                                 <div class="detail-value">{{ dorama?.status ?? 0 }}</div>
                             </div>
                         </div>
-
                         <div class="details-column">
                             <div class="detail-card">
                                 <div class="detail-label">Актеры:</div>
@@ -86,7 +83,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="movie-description">
                         <h3 class="section-title">Описание</h3>
                         <p class="description-text">{{ dorama?.description }}</p>
@@ -94,7 +90,6 @@
                 </div>
             </div>
         </div>
-
         <div class="player-section">
             <div class="player-header">
                 <h3 class="section-title">Смотреть онлайн</h3>
@@ -125,7 +120,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="video-player">
                 <div class="video-placeholder">
                     <div class="play-overlay">
@@ -141,7 +135,6 @@
                 </div>
             </div>
         </div>
-
         <h3 class="section-title similar-title">Похожие дорамы</h3>
         <div class="similar-section">
             <div class="vertical-grid">
@@ -157,7 +150,6 @@
                         </div>
                     </div>
                 </ng-container>
-
                 <ng-container *ngIf="!loadingSimilar">
                     <div *ngFor="let similar of similar_content"
                         class="movie-card-vertical" (click)="onTheNextPageS(similar)">
@@ -174,7 +166,6 @@
                 </ng-container>
             </div>
         </div>
-
         <div class="comments-section">
             <h3 class="section-title">Комментарии</h3>
 
@@ -184,7 +175,6 @@
                     class="comment-input">
                 <button class="btn-comment">Отправить</button>
             </div>
-
             <div class="comments-list">
                 <div class="comment">
                     <div class="comment-avatar">А</div>

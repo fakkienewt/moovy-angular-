@@ -21,7 +21,9 @@ import { FilterPagination } from './paginations/filter-pagination/filter-paginat
 import { Anime } from './content/anime/anime';
 import { Profile } from './profile/profile/profile';
 import { SignUp } from './profile/sign.up/sign.up';
-import { SignIn } from './profile/sign-in/sign-in';
+import { FooterService } from './services/footer.service';
+import { HeaderService } from './services/header.service';
+import { ProfileService } from './services/profile.service';
 
 @NgModule({
   declarations: [
@@ -38,8 +40,7 @@ import { SignIn } from './profile/sign-in/sign-in';
     Filters,
     FilterPagination,
     Profile,
-    SignUp,
-    SignIn,
+    SignUp
   ],
   imports: [
     CommonModule,
@@ -51,7 +52,10 @@ import { SignIn } from './profile/sign-in/sign-in';
   providers: [
     provideBrowserGlobalErrorListeners(),
     NewFilmsService,
-    Service
+    Service,
+    FooterService, 
+    HeaderService, 
+    ProfileService
   ],
   bootstrap: [App]
 })

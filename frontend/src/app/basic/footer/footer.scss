@@ -1,32 +1,27 @@
 .footer {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 50%, #fff0f5 100%);
+    background: linear-gradient(135deg, #fffafb 0%, #fff5f7 100%);
     color: #ff85a2;
-    padding: 2rem;
+    padding: 1rem;
     margin-top: auto;
-    width: 1015px;
+    width: 1050px;
     height: 160px;
     justify-content: center;
     align-items: center;
     text-align: center;
     font-family: 'Arial', sans-serif;
-    position: relative;
-    overflow: hidden;
     border: 2px solid #ffd1dc;
     border-radius: 30px 30px 0 0;
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
     border-top: 3px solid #ffd1dc;
-    margin-top: 10px;
 }
 
 .social-links {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
     justify-content: center;
-    z-index: 2;
 }
 
 .social-link {
@@ -64,7 +59,6 @@
 .footer-text {
     font-size: 14px;
     color: #ff85a2;
-    z-index: 2;
     animation: fadeIn 1s ease-out;
     margin-top: 10px;
     font-weight: 600;

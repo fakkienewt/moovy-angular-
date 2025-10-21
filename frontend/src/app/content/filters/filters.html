@@ -6,7 +6,6 @@
                 <p class="filters-subtitle">Найдите именно то, что хотите посмотреть</p>
             </div>
         </div>
-
         <div class="filters-body">
             <div class="filter-section">
                 <div class="section-header">
@@ -55,7 +54,6 @@
                     </label>
                 </div>
             </div>
-
             <div class="filter-section">
                 <div class="section-header">
                     <h3 class="section-title">Параметры поиска</h3>
@@ -87,7 +85,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="actions-section">
                 <button class="action-btn secondary"
                     (click)="onReset()">
@@ -99,7 +96,6 @@
                 </button>
             </div>
         </div>
-
         <div class="search-results"
             *ngIf="foundedContent.length > 0">
             <div class="results-header-modern">
@@ -138,7 +134,6 @@
                 </div>
             </div>
         </div>
-
         <div *ngIf="hasSearched && foundedContent.length === 0"
             class="empty-state-modern">
             <div class="empty-content-modern">
@@ -147,7 +142,6 @@
             </div>
         </div>
     </div>
-
     <app-filter-pagination *ngIf="hasSearched && foundedContent.length > 0"
         [currentPage]="currentPage"
         [hasMoreContent]="hasMoreContent"

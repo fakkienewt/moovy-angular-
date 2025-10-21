@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const connect = require('./connect');
 const mysql = require('mysql2');
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = 3500;
@@ -151,7 +153,7 @@ app.get('/api/filtered-content', async (req, res) => {
                 break;
             case 'default':
             default:
-                sql += ' ORDER BY id DESC'; 
+                sql += ' ORDER BY id DESC';
                 break;
         }
 
@@ -185,6 +187,186 @@ app.get('/api/similar', async (req, res) => {
         res.json(results);
     } catch (err) {
         console.log('ERROOR:', err);
+    }
+});
+
+const JWT_SECRET = 'secret-key-moovy-app';
+
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: 'Токен не предоставлен'
+        });
+    }
+
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({
+                success: false,
+                message: 'Невалидный или просроченный токен'
+            });
+        }
+
+        req.user = decoded;
+        next();
+    });
+}
+
+app.post('/api/registration', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'email и пароль обязательны'
+            });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'пароль должен быть не менее 6 символов'
+            });
+        }
+
+        const existingUser = await query('SELECT id FROM users WHERE email = ?', [email]);
+
+        if (existingUser.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'пользователь с таким email уже существует'
+            });
+        }
+
+        const hash = await argon2.hash(password, {
+            type: argon2.argon2id,
+            memoryCost: 19,
+            timeCost: 2,
+            parallelism: 1
+        });
+
+        const insertQuery = `
+            INSERT INTO users(email, password, nickname, image, favourites, watch_later, comments)
+            VALUES(?, ?, '', '', '[]', '[]', '[]')
+        `;
+
+        const results = await query(insertQuery, [email, hash]);
+
+        console.log('пользователь добавлен, ID:', results.insertId);
+
+        const token = jwt.sign(
+            {
+                userId: results.insertId,
+                email: email
+            },
+            JWT_SECRET,
+            { expiresIn: '10d' }
+        )
+
+        res.json({
+            success: true,
+            message: 'пользователь успешно зарегистрирован',
+            data: {
+                id: results.insertId,
+                email: email,
+                token: token
+            }
+        });
+
+    } catch (err) {
+        console.log('ERROR:', err.message);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера при регистрации'
+        });
+    }
+});
+
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'нет или email или пароля'
+            });
+        }
+
+        const users = await query('SELECT * FROM users WHERE email = ?', [email]);
+
+        if (users.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Пользователь не найден'
+            });
+        }
+
+        const user = users[0];
+
+        const isPasswordValid = await argon2.verify(user.password, password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: 'Неверный пароль'
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                email: user.email
+            },
+            JWT_SECRET,
+            { expiresIn: '10d' }
+        );
+
+        res.json({
+            success: true,
+            message: 'Успешный вход',
+            data: {
+                id: user.id,
+                email: user.email,
+                token: token
+            }
+        });
+
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+});
+
+app.get('/api/profile', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        const users = await query(
+            'SELECT id, email, nickname, image, favourites, watch_later, comments FROM users WHERE id = ?',
+            [userId]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Пользователь не найден'
+            });
+        }
+
+        res.json({
+            success: true,
+            data: users[0]
+        });
+
+    } catch (err) {
+        console.log(err);
+        throw err;
     }
 });
 

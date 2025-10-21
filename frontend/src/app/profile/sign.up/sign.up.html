@@ -1,1 +1,69 @@
-<p>sign.up works!</p>
+<div class="signup-page">
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1 class="signup-title">Create Account</h1>
+            <p class="signup-subtitle">Join our community</p>
+        </div>
+
+        <div *ngIf="registrationSuccess"
+            class="custom-notification success-notification">
+            <div class="notification-content">
+                <div class="notification-icon success-icon"></div>
+                <div class="notification-text">
+                    <strong>Registration Successful</strong>
+                    <p>Your account has been created successfully</p>
+                </div>
+            </div>
+            <button class="notification-close"
+                (click)="registrationSuccess = false">×</button>
+        </div>
+
+        <div *ngIf="alreadyRegistered"
+            class="custom-notification warning-notification">
+            <div class="notification-content">
+                <div class="notification-icon warning-icon"></div>
+                <div class="notification-text">
+                    <strong>Already Registered</strong>
+                    <p>This email address is already registered</p>
+                </div>
+            </div>
+            <button class="notification-close"
+                (click)="alreadyRegistered = false">×</button>
+        </div>
+
+        <form class="signup-form">
+            <div class="form-section">
+                <div class="input-group">
+                    <input type="email"
+                        placeholder="Email"
+                        class="cute-input"
+                        #InputGmailValue
+                        required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password"
+                        placeholder="Password"
+                        minlength="6"
+                        required
+                        class="cute-input"
+                        #InputPasswordValue>
+                </div>
+            </div>
+
+            <div class="actions-section">
+                <button type="button"
+                    class="btn-primary"
+                    (click)="onClickSignUp(InputGmailValue.value, InputPasswordValue.value)">
+                    Sign Up
+                </button>
+
+                <button type="button"
+                    class="btn-secondary"
+                    (click)="onClickLogin(InputGmailValue.value, InputPasswordValue.value)">
+                    Sign In
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

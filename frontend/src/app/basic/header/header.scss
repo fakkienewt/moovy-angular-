@@ -18,7 +18,6 @@
     padding: 15px 30px;
     box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
     border-bottom: 3px solid #ffd1dc;
-    position: relative;
     border-radius: 30px;
     font-family: 'Arial', sans-serif;
 }
@@ -27,7 +26,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
 }
 
 .logo-section {
@@ -112,7 +110,6 @@
     font-size: 15px;
     background: transparent;
     color: #ff85a2;
-    font-family: 'Arial', sans-serif;
 }
 
 .search-input::placeholder {
@@ -239,13 +236,11 @@
     font-size: 1.2rem;
     color: #ff85a2;
     font-weight: 700;
-    margin: 0;
 }
 
 .no-results-hint {
     font-size: 0.9rem;
     color: #ff9dbb;
-    margin: 0;
 }
 
 .results-grid {
@@ -280,7 +275,6 @@
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid #ffd1dc;
-    flex-shrink: 0;
 }
 
 .poster-image-modern {
@@ -336,6 +330,7 @@
 }
 
 .profile-btn {
+    outline: none;
     background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
     border: none;
     cursor: pointer;

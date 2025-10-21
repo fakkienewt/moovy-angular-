@@ -112,4 +112,8 @@ export class Header {
     }
     this.closeSearchWindow();
   }
+
+  onClickSign(): void {
+    this.router.navigate([`sign.up`])
+  }
 }

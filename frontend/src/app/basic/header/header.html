@@ -11,7 +11,6 @@
             </div>
             <span class="logo-text">Moovy</span>
         </div>
-
         <div class="search-section">
             <div class="search-container">
                 <input type="text"
@@ -29,7 +28,6 @@
                     </svg>
                 </button>
             </div>
-
             <div class="search-results-modern"
                 *ngIf="searchResults">
                 <div class="results-header-modern">
@@ -50,7 +48,6 @@
                         </svg>
                     </button>
                 </div>
-
                 <div class="results-content">
                     <div *ngIf="searchResults.length === 0"
                         class="no-results-modern">
@@ -58,7 +55,6 @@
                         <div class="no-results-text">Ничего не найдено</div>
                         <div class="no-results-hint">Попробуйте изменить запрос</div>
                     </div>
-
                     <div *ngIf="searchResults.length > 0"
                         class="results-grid">
                         <div class="result-card-modern"
@@ -80,9 +76,8 @@
                 </div>
             </div>
         </div>
-
         <div class="profile-section">
-            <button class="profile-btn">
+            <button class="profile-btn" (click)="onClickSign()">
                 <svg width="24"
                     height="24"
                     viewBox="0 0 24 24"
@@ -99,7 +94,6 @@
             </button>
         </div>
     </div>
-
     <div class="floating-elements">
         <div class="floating-star">✦</div>
         <div class="floating-heart">♥</div>

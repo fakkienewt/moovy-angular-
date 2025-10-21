@@ -1,6 +1,5 @@
 <div class="new-films-container">
     <div class="new-label">НОВИНКИ</div>
-
     <div class="carousel-wrapper">
         <div class="carousel-arrow left-arrow">
             <div class="arrow-circle"
@@ -17,7 +16,6 @@
                 </svg>
             </div>
         </div>
-
         <section class="cute-vertical-movies">
             <div class="vertical-grid">
                 <div class="loading-container"
@@ -32,7 +30,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div *ngIf="!loading"
                     class="content-container">
                     <div *ngFor="let movie of moviesList$ | async"
@@ -50,7 +47,6 @@
                 </div>
             </div>
         </section>
-
         <div class="carousel-arrow right-arrow">
             <div class="arrow-circle"
                 (click)="onClickNext()">

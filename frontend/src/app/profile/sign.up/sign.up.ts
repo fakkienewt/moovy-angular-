@@ -17,6 +17,7 @@ export class SignUp implements OnInit {
   alreadyRegistered: boolean = false;
   registrationSuccess: boolean = false;
   isAuthenticated: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private footerService: FooterService,
@@ -27,14 +28,17 @@ export class SignUp implements OnInit {
   onClickSignUp(email: string, password: string): void {
     this.alreadyRegistered = false;
     this.registrationSuccess = false;
+    this.isLoading = true;
 
     if (!email || !password) {
       console.log('Заполните все поля');
+      this.isLoading = false;
       return;
     }
 
     if (!email.includes('@')) {
       console.log('Некорректная почта');
+      this.isLoading = false;
       return;
     }
 
@@ -46,19 +50,22 @@ export class SignUp implements OnInit {
     this.profileService.register(email, password).subscribe({
       next: (response) => {
         console.log('Регистрация успешна:', response);
+        this.isLoading = false;
 
         if (response.data && response.data.token) {
           this.profileService.setToken(response.data.token);
           console.log('JWT токен сохранен в localStorage');
 
-          this.loadUserProfile();
-        }
+          this.registrationSuccess = true;
+          this.alreadyRegistered = false;
+          this.isAuthenticated = true;
 
-        this.registrationSuccess = true;
-        this.alreadyRegistered = false;
+          this.router.navigate(['/profile']);
+        }
       },
       error: (error) => {
         console.log('Ошибка регистрации:', error);
+        this.isLoading = false;
         this.alreadyRegistered = true;
         this.registrationSuccess = false;
       }
@@ -68,14 +75,17 @@ export class SignUp implements OnInit {
   onClickLogin(email: string, password: string): void {
     this.alreadyRegistered = false;
     this.registrationSuccess = false;
+    this.isLoading = true;
 
     if (!email || !password) {
       console.log('Заполните все поля');
+      this.isLoading = false;
       return;
     }
 
     if (!email.includes('@')) {
       console.log('Некорректная почта');
+      this.isLoading = false;
       return;
     }
 
@@ -84,38 +94,26 @@ export class SignUp implements OnInit {
     this.profileService.login(email, password).subscribe({
       next: (response) => {
         console.log('Вход успешен:', response);
+        this.isLoading = false;
 
         if (response.data && response.data.token) {
           this.profileService.setToken(response.data.token);
           console.log('JWT токен сохранен');
 
-          this.loadUserProfile();
+          this.isAuthenticated = true;
+
+          setTimeout(() => {
+            this.router.navigate(['profile']);
+          }, 2000);
+
         }
       },
       error: (error) => {
         console.log('Ошибка входа:', error);
+        this.isLoading = false;
         if (error.status === 401) {
           console.log('Неверный email или пароль');
         }
-      }
-    });
-  }
-
-  loadUserProfile(): void {
-    if (!this.profileService.isAuthenticated()) {
-      console.log('Пользователь не авторизован');
-      this.isAuthenticated = false;
-      return;
-    }
-
-    this.profileService.getProfile().subscribe({
-      next: (profile) => {
-        console.log('Данные профиля:', profile);
-        this.isAuthenticated = true;
-        this.router.navigate(['/profile']);
-      },
-      error: (error) => {
-        console.log('Ошибка получения профиля:', error);
       }
     });
   }
@@ -124,7 +122,8 @@ export class SignUp implements OnInit {
     if (this.profileService.isAuthenticated()) {
       console.log('Пользователь уже авторизован');
       this.isAuthenticated = true;
-      this.loadUserProfile();
+
+      this.router.navigate(['/profile']);
     } else {
       console.log('Пользователь не авторизован');
       this.isAuthenticated = false;
@@ -135,6 +134,7 @@ export class SignUp implements OnInit {
     setTimeout(() => {
       this.footerService.hide();
     });
+
     this.checkAuthStatus();
   }
 

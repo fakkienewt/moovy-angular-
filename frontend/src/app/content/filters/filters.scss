@@ -2,6 +2,7 @@
     width: 1040px;
     padding: 20px 0;
 }
+
 .filters-main-card {
     background: linear-gradient(135deg, #fffafb 0%, #fff5f7 100%);
     border-radius: 25px;
@@ -113,12 +114,12 @@
 }
 
 .filter-item {
-        display: block;
-        font-size: 14px;
-        color: #ff85a2;
-        margin-bottom: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
+    display: block;
+    font-size: 14px;
+    color: #ff85a2;
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 .filter-select {
@@ -282,7 +283,7 @@
 
 .vertical-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 25px;
     padding: 10px 5px;
 }
@@ -398,4 +399,3 @@
         transform: translateY(0);
     }
 }
-

@@ -6,6 +6,17 @@
                     <div class="poster-wrapper">
                         <img [src]="getPosterUrl(series?.poster)"
                             class="movie-poster">
+
+                        <div class="watched-indicator">
+                            <svg width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                    fill="white" />
+                            </svg>
+                        </div>
+
                         <div class="movie-rating">{{ series?.rating }}</div>
                     </div>
                     <div class="action-buttons">
@@ -19,18 +30,25 @@
                             </svg>
                             Смотреть онлайн
                         </button>
-                        <button class="btn-favorite">
+                        <button class="btn-favorite"
+                            [class.favorite]="isFavorite"
+                            (click)="onClickFavorite(series)">
                             <svg width="20"
                                 height="20"
                                 viewBox="0 0 24 24"
                                 fill="none">
-                                <path
+                                <path *ngIf="!isFavorite"
                                     d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
                                     fill="none"
                                     stroke="currentColor"
                                     stroke-width="1.5" />
+                                <path *ngIf="isFavorite"
+                                    d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"
+                                    fill="#ff85a2"
+                                    stroke="#ff85a2"
+                                    stroke-width="1.5" />
                             </svg>
-                            В избранное
+                            {{ isFavorite ? 'В избранном' : 'В избранное' }}
                         </button>
                         <button class="btn-later">
                             <svg width="20"
@@ -52,7 +70,6 @@
                 </div>
                 <div class="movie-info">
                     <h1 class="movie-title-main">{{ series?.title }}</h1>
-
                     <div class="movie-details-enhanced">
                         <div class="details-column">
                             <div class="detail-card">
@@ -152,15 +169,27 @@
                 </ng-container>
                 <ng-container *ngIf="!loadingSimilar">
                     <div *ngFor="let similar of similar_content"
-                        class="movie-card-vertical" (click)="onTheNextPageS(similar)">
+                        class="movie-card-vertical"
+                        (click)="onTheNextPageS(similar)">
                         <div class="poster-wrapper">
                             <img [src]="getPosterUrl(similar.poster)"
                                 class="poster-image">
-                            <div class="movie-rating">{{ similar.rating || '7.5' }}</div>
+                            <div class="movie-rating">{{ similar.rating }}</div>
                         </div>
                         <div class="movie-info">
                             <h3 class="movie-title">{{ similar.title }}</h3>
                             <p class="movie-year">{{ similar.year }}</p>
+                        </div>
+                    </div>
+
+                    <div *ngFor="let i of getRemainingSkeletons()"
+                        class="movie-card-vertical empty">
+                        <div class="poster-wrapper">
+                            <div class="empty-poster"></div>
+                        </div>
+                        <div class="movie-info">
+                            <div class="empty-title"></div>
+                            <div class="empty-year"></div>
                         </div>
                     </div>
                 </ng-container>

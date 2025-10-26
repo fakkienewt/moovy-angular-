@@ -347,24 +347,3 @@
     box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
     animation: none;
 }
-
-.floating-star,
-.floating-heart {
-    position: absolute;
-    color: #ff85a2;
-    font-size: 16px;
-    opacity: 0.6;
-    animation: float 6s ease-in-out infinite;
-}
-
-.floating-star {
-    animation-delay: 0s;
-    top: 20%;
-    left: 10%;
-}
-
-.floating-heart {
-    animation-delay: 2s;
-    top: 60%;
-    left: 85%;
-}

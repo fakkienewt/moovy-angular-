@@ -32,6 +32,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
+              "src/assets/svg",
               {
                 "glob": "**/*",
                 "input": "public"

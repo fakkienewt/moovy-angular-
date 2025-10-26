@@ -183,10 +183,19 @@ app.get('/api/similar', async (req, res) => {
     try {
         const type = req.query.type;
         const genres = req.query.genres;
+
+        console.log('Similar request params:', { type, genres });
+
+        if (!type) {
+            console.log('ERROR: type parameter is missing!');
+            return res.json([]);
+        }
+
         const results = await connect.getSimilarFilms(genres, type);
         res.json(results);
     } catch (err) {
-        console.log('ERROOR:', err);
+        console.log('ERROR:', err);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -234,6 +243,16 @@ app.post('/api/registration', async (req, res) => {
             });
         }
 
+        await query(`
+            CREATE TABLE IF NOT EXISTS users (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            email VARCHAR(255) UNIQUE NOT NULL, 
+            password VARCHAR(255) NOT NULL,
+            nickname TEXT, 
+            image TEXT
+        )
+        `);
+
         const existingUser = await query('SELECT id FROM users WHERE email = ?', [email]);
 
         if (existingUser.length > 0) {
@@ -251,10 +270,9 @@ app.post('/api/registration', async (req, res) => {
         });
 
         const insertQuery = `
-            INSERT INTO users(email, password, nickname, image, favourites, watch_later, comments)
-            VALUES(?, ?, '', '', '[]', '[]', '[]')
+        INSERT INTO users(email, password, nickname, image) 
+        VALUES(?, ?, '', '')
         `;
-
         const results = await query(insertQuery, [email, hash]);
 
         console.log('пользователь добавлен, ID:', results.insertId);
@@ -348,7 +366,7 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
         const userId = req.user.userId;
 
         const users = await query(
-            'SELECT id, email, nickname, image, favourites, watch_later, comments FROM users WHERE id = ?',
+            'SELECT id, email, nickname, image FROM users WHERE id = ?',
             [userId]
         );
 
@@ -369,6 +387,208 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
         throw err;
     }
 });
+
+app.get('/api/favorites', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { type } = req.query;
+
+        let sqlParts = [];
+        let params = [];
+
+        const contentTypes = [
+            { type: 'film', table: 'films' },
+            { type: 'serie', table: 'series' },
+            { type: 'anime', table: 'anime' },
+            { type: 'dorama', table: 'dorama' }
+        ];
+
+        contentTypes.forEach(({ type: contentType, table }) => {
+            if (!type || type === contentType) {
+                let partSql = `
+                   SELECT 
+                    favorites.id as favorite_id,
+                    favorites.added_at,
+                    favorites.content_type,
+                    favorites.content_id,
+                    ${table}.title,              
+                    ${table}.poster,                 
+                    ${table}.rating,
+                    ${table}.year,
+                    ${table}.genres,
+                    ${table}.countries,
+                    ${table}.description
+                    FROM favorites
+                    INNER JOIN ${table} ON favorites.content_id = ${table}.id AND favorites.content_type = '${contentType}'
+                    WHERE favorites.user_id = ?
+                `;
+                sqlParts.push(partSql);
+                params.push(userId);
+            }
+        });
+
+        if (sqlParts.length === 0) {
+            return res.json({
+                success: true,
+                data: []
+            });
+        }
+
+        const finalSql = sqlParts.join(' UNION ALL ') + ' ORDER BY added_at DESC';
+        const favorites = await query(finalSql, params);
+
+        res.json({
+            success: true,
+            data: favorites
+        });
+
+    } catch (err) {
+        console.error('Ошибка при получении избранного:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+app.post('/api/favorites', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { content } = req.body;
+
+        if (!content || !content.id || !content.type) {
+            return res.status(400).json({
+                success: false,
+                message: 'Неверные данные контента'
+            });
+        }
+
+        let tableName;
+
+        switch (content.type) {
+            case 'film': tableName = 'films'; break;
+            case 'serie': tableName = 'series'; break;
+            case 'anime': tableName = 'anime'; break;
+            case 'dorama': tableName = 'dorama'; break;
+            default:
+                return res.status(400).json({
+                    success: false,
+                    message: 'Неверный тип контента'
+                });
+        }
+
+        const contentExists = await query(
+            `SELECT id FROM ${tableName} WHERE id = ?`,
+            [content.id]
+        );
+
+        if (contentExists.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Контент не найден'
+            });
+        }
+
+        const existingFavorite = await query(
+            'SELECT id FROM favorites WHERE user_id = ? AND content_id = ? AND content_type = ?',
+            [userId, content.id, content.type]
+        );
+
+        if (existingFavorite.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Уже в избранном'
+            });
+        }
+
+        await query(
+            'INSERT INTO favorites (user_id, content_id, content_type) VALUES (?, ?, ?)',
+            [userId, content.id, content.type]
+        );
+
+        res.json({
+            success: true,
+            message: 'Добавлено в избранное'
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.delete('/api/favorites', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { contentId, contentType } = req.query;
+
+        await query(
+            'DELETE FROM favorites WHERE user_id = ? AND content_id = ? AND content_type = ?',
+            [userId, contentId, contentType]
+        );
+
+        res.json({
+            success: true,
+            message: 'Удалено из избранного'
+        });
+    } catch (err) {
+        console.error('Ошибка при удалении из избранного:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+app.post('/api/postID', authenticateToken, async (req, res) => {
+    const { id, type } = req.body;
+
+    if (!id || !type) {
+        return res.status(400).json({
+            success: false,
+            message: 'нет id или type'
+        });
+    }
+
+    let table;
+
+    if (type === 'film') {
+        table = 'films';
+    } else if (type === 'serie') {
+        table = 'series'; 
+    } else if (type === 'anime') {
+        table = 'anime';
+    } else if (type === 'dorama') {
+        table = 'dorama';
+    } else {
+        return res.status(400).json({
+            success: false,
+            message: 'Неверный тип контента'
+        });
+    }
+
+    try {
+        const data = await query(`SELECT * FROM ${table} WHERE id = ?`, [id]);
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Контент не найден'
+            });
+        }
+
+        res.json({
+            success: true,
+            data: data[0]
+        });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);

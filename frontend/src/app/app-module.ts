@@ -24,6 +24,7 @@ import { SignUp } from './profile/sign.up/sign.up';
 import { FooterService } from './services/footer.service';
 import { HeaderService } from './services/header.service';
 import { ProfileService } from './services/profile.service';
+import { FavoritesSyncService } from './services/favorites-sync-service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { ProfileService } from './services/profile.service';
     Filters,
     FilterPagination,
     Profile,
-    SignUp
+    SignUp,
   ],
   imports: [
     CommonModule,
@@ -55,7 +56,8 @@ import { ProfileService } from './services/profile.service';
     Service,
     FooterService, 
     HeaderService, 
-    ProfileService
+    ProfileService, 
+    FavoritesSyncService
   ],
   bootstrap: [App]
 })

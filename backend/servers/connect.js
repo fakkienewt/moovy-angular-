@@ -225,24 +225,37 @@ async function getSearchData(searchQuery) {
 
 async function getSimilarFilms(genres, type) {
     let connection = await mysql.createConnection(options);
-    let genresArr = genres.split(',').map(genre => genre.trim());
+
+    const safeType = (type && type !== 'undefined') ? type : 'film';
+
+    console.log('getSimilarFilms called with:', { type, safeType, genres });
+
+    let genresArr = genres ? genres.split(',').map(genre => genre.trim()) : [];
 
     try {
         const tableMap = {
             'film': 'films',
-            'anime': 'anime', 
+            'anime': 'anime',
             'dorama': 'dorama',
             'serie': 'series'
         };
-        
-        const tableName = tableMap[type] || type;
-        
-        const query = `SELECT * FROM ${tableName} ORDER BY RAND()`;
+
+        const tableName = tableMap[safeType] || 'films';
+
+        console.log('Using table:', tableName);
+
+        const query = `SELECT * FROM ${tableName} ORDER BY RAND() LIMIT 10`;
         const results = await fetchResults(connection, query, []);
-        
+
         let similarResults = [];
 
+        if (genresArr.length === 0) {
+            return results.slice(0, 4);
+        }
+
         for (let item of results) {
+            if (!item.genres) continue;
+
             let itemGenres = item.genres.split(',').map(g => g.trim());
 
             for (let genre of genresArr) {
@@ -256,7 +269,7 @@ async function getSimilarFilms(genres, type) {
         return similarResults.slice(0, 4);
 
     } catch (error) {
-        console.log('ERROR:', error);
+        console.error('ERROR in getSimilarFilms:', error);
         return [];
     } finally {
         if (connection) {

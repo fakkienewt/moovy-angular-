@@ -11,20 +11,18 @@ import { Service } from '../../services/service';
 })
 export class Main implements OnInit {
 
-  films: Film[] = [];
+  films: Film[] = []
   seriesList: Film[] = [];
   dorama: Film[] = [];
   anime: Film[] = [];
 
-  error = false;
-  loading = true;
   activeTab: string = 'films';
-  loading_pagination: boolean;
-
-  loadingFilms = true;
-  loadingSeries = true;
-  loadingDorama = true;
-  loadingAnime = true;
+  loading: boolean = true;
+  loading_pagination: boolean = false;
+  loadingFilms: boolean = true;
+  loadingSeries: boolean = true;
+  loadingDorama: boolean = true;
+  loadingAnime: boolean = true;
 
   constructor(
     private MainService: Service,
@@ -41,182 +39,113 @@ export class Main implements OnInit {
     this.loadCategoryData(tab);
   }
 
-  loadCategoryData(category: string,): void {
+  loadCategoryData(category: string): void {
+    this.loading = true;
+    this.loading_pagination = false;
+
     switch (category) {
       case 'films':
+        this.loadingFilms = true;
         this.loadFilms();
-        this.loadFilmsWithPagination();
         break;
       case 'series':
+        this.loadingSeries = true;
         this.loadSeries();
-        this.loadSeriesWithPagination();
         break;
       case 'dorama':
+        this.loadingDorama = true;
         this.loadDorama();
-        this.loadDoramaWithPagination();
         break;
       case 'anime':
+        this.loadingAnime = true;
         this.loadAnime();
-        this.loadAnimeWithPagination();
         break;
     }
   }
 
   onPageChanged(newPage: number): void {
     this.MainService.setPage(newPage);
-    if (this.activeTab === 'films') {
-      this.loadFilmsWithPagination();
-    }
-
-    if (this.activeTab === 'series') {
-      this.loadSeriesWithPagination();
-    }
-
-    if (this.activeTab === 'dorama') {
-      this.loadDoramaWithPagination();
-    }
-
-    if (this.activeTab === 'anime') {
-      this.loadAnimeWithPagination();
-    }
-  }
-
-  loadFilmsWithPagination(): void {
-
     this.loading_pagination = true;
-    this.films = [];
 
-    this.MainService.getFilms().subscribe({
-      next: (data: Film[]) => {
-
-        if (!data.length) {
-          this.MainService.backPage();
-          this.loadFilmsWithPagination();
-          return;
-        }
-
-        this.films = data;
-        this.loading_pagination = false;
-      }
-    });
-  }
-
-  loadSeriesWithPagination(): void {
-    this.loading_pagination = true;
-    this.seriesList = [];
-
-    this.MainService.getSeries().subscribe({
-      next: (data: Film[]) => {
-
-        if (!data.length) {
-          this.MainService.backPage();
-          this.loadSeriesWithPagination();
-          return;
-        }
-
-        this.seriesList = data;
-        this.loading_pagination = false;
-      }
-    });
-  }
-
-  loadDoramaWithPagination(): void {
-    this.loading_pagination = true;
-    this.dorama = [];
-
-    this.MainService.getDorama().subscribe({
-      next: (data: Film[]) => {
-
-        if (!data.length) {
-          this.MainService.backPage();
-          this.loadDoramaWithPagination();
-          return;
-        }
-
-        this.dorama = data;
-        this.loading_pagination = false;
-      }
-    });
-  }
-
-  loadAnimeWithPagination(): void {
-    this.loading_pagination = true;
-    this.anime = [];
-
-    this.MainService.getAnime().subscribe({
-      next: (data: Film[]) => {
-
-        if (!data.length) {
-          this.MainService.backPage();
-          this.loadAnimeWithPagination();
-          return;
-        }
-
-        this.anime = data;
-        this.loading_pagination = false;
-      }
-    });
+    switch (this.activeTab) {
+      case 'films':
+        this.loadFilms();
+        break;
+      case 'series':
+        this.loadSeries();
+        break;
+      case 'dorama':
+        this.loadDorama();
+        break;
+      case 'anime':
+        this.loadAnime();
+        break;
+    }
   }
 
   loadFilms(): void {
-    this.loadingFilms = true;
     this.MainService.getFilms().subscribe({
       next: (data: Film[]) => {
         this.films = data;
         this.loading = false;
+        this.loading_pagination = false;
         this.loadingFilms = false;
       },
       error: (error: any) => {
         console.error(error);
-        this.error = true;
+        this.loading = false;
+        this.loading_pagination = false;
         this.loadingFilms = false;
       }
-    })
+    });
   }
 
   loadSeries(): void {
-    this.loadingSeries = true;
     this.MainService.getSeries().subscribe({
       next: (data: Film[]) => {
         this.seriesList = data;
         this.loading = false;
+        this.loading_pagination = false;
         this.loadingSeries = false;
       },
       error: (error: any) => {
-        console.log(error);
-        this.error = true;
+        console.error(error);
+        this.loading = false;
+        this.loading_pagination = false;
         this.loadingSeries = false;
       }
     });
   }
 
   loadDorama(): void {
-    this.loadingDorama = true;
     this.MainService.getDorama().subscribe({
       next: (data: Film[]) => {
         this.dorama = data;
         this.loading = false;
+        this.loading_pagination = false;
         this.loadingDorama = false;
       },
       error: (error: any) => {
-        console.log(error);
-        this.error = true;
+        console.error(error);
+        this.loading = false;
+        this.loading_pagination = false;
         this.loadingDorama = false;
       }
     });
   }
 
   loadAnime(): void {
-    this.loadingAnime = true;
     this.MainService.getAnime().subscribe({
       next: (data: Film[]) => {
         this.anime = data;
         this.loading = false;
+        this.loading_pagination = false;
         this.loadingAnime = false;
       },
       error: (error: any) => {
-        console.log(error);
-        this.error = true;
+        console.error(error);
+        this.loading = false;
+        this.loading_pagination = false;
         this.loadingAnime = false;
       }
     });
@@ -235,7 +164,7 @@ export class Main implements OnInit {
     });
   }
 
-  onClickPageSeries(series: Film) {
+  onClickPageSeries(series: Film): void {
     this.router.navigate([`series/${series.id}`], {
       state: { series: series }
     }).then(() => {
@@ -243,7 +172,7 @@ export class Main implements OnInit {
     });
   }
 
-  onClickPageDorama(dorama: Film) {
+  onClickPageDorama(dorama: Film): void {
     this.router.navigate([`dorama/${dorama.id}`], {
       state: { dorama: dorama }
     }).then(() => {
@@ -251,7 +180,7 @@ export class Main implements OnInit {
     });
   }
 
-  onClickPageAnime(anime: Film) {
+  onClickPageAnime(anime: Film): void {
     this.router.navigate([`anime/${anime.id}`], {
       state: { anime: anime }
     }).then(() => {
@@ -259,4 +188,3 @@ export class Main implements OnInit {
     });
   }
 }
-

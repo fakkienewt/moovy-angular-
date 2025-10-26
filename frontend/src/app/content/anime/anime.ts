@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Film } from '../../models.ts/film.model';
 import { Service } from '../../services/service';
+import { ProfileService } from '../../services/profile.service';
+import { FavoritesSyncService } from '../../services/favorites-sync-service';
 
 @Component({
   selector: 'app-anime',
@@ -9,30 +11,91 @@ import { Service } from '../../services/service';
   templateUrl: './anime.html',
   styleUrl: './anime.scss'
 })
-export class Anime implements OnInit {
-
-  constructor(
-    public router: Router,
-    private service: Service,
-  ) { }
+export class Anime implements OnInit, OnDestroy {
 
   anime: Film | null = null;
   error = false;
 
-  similarGenres: string | undefined;
   similar_content: Film[] = [];
-  type: string | undefined;
-
   loadingSimilar: boolean = false;
 
+  isFavorite: boolean = false;
+
+  private popStateListener: () => void;
+
+  constructor(
+    public router: Router,
+    private service: Service,
+    private profileService: ProfileService,
+    private favoritesSync: FavoritesSyncService
+  ) {
+    this.popStateListener = () => {
+      setTimeout(() => {
+        this.loadAnimeData();
+        window.scrollTo(0, 0);
+      }, 100);
+    };
+  }
+
   ngOnInit(): void {
+    this.loadAnimeData();
+    window.addEventListener('popstate', this.popStateListener);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('popstate', this.popStateListener);
+  }
+
+  loadAnimeData(): void {
     const navigation = window.history.state;
-    if (navigation && navigation.anime) {
+
+    if (navigation?.movie) {
+      this.anime = navigation.movie;
+    } else if (navigation?.anime) {
       this.anime = navigation.anime;
+    }
+
+    if (this.anime) {
+      if (this.favoritesSync.getAndResetFavoritesChanged()) {
+        this.checkIfFavoriteForce();
+      } else {
+        this.checkIfFavorite();
+      }
+      this.loadSimilarAnime();
     } else {
       this.error = true;
     }
-    this.loadSimilarAnime();
+  }
+
+  checkIfFavoriteForce(): void {
+    if (!this.anime?.id) return;
+
+    this.profileService.getFavorites().subscribe({
+      next: (response: any) => {
+        const favorites = response.data || response.favorites || [];
+        this.isFavorite = favorites.some((fav: Film) => fav.id === this.anime?.id);
+        localStorage.setItem(`fav_${this.anime!.id}`, this.isFavorite.toString());
+      },
+      error: () => this.isFavorite = false
+    });
+  }
+
+  checkIfFavorite(): void {
+    if (!this.anime?.id) return;
+
+    const savedFav = localStorage.getItem(`fav_${this.anime.id}`);
+    if (savedFav) {
+      this.isFavorite = savedFav === 'true';
+    } else {
+      this.profileService.getFavorites().subscribe({
+        next: (response: any) => {
+          const favorites = response.data || response.favorites || [];
+          this.isFavorite = favorites.some((fav: Film) => fav.id === this.anime?.id);
+          localStorage.setItem(`fav_${this.anime!.id}`, this.isFavorite.toString());
+        },
+        error: () => this.isFavorite = false
+      });
+    }
   }
 
   getPosterUrl(poster: string | null | undefined): string {
@@ -41,28 +104,66 @@ export class Anime implements OnInit {
   }
 
   loadSimilarAnime(): void {
-    this.loadingSimilar = true;
-    this.similarGenres = this.anime?.genres;
-    this.type = this.anime?.type;
+    if (!this.anime) return;
 
-    this.service.getSimilarFilms(this.similarGenres, this.type).subscribe({
+    this.loadingSimilar = true;
+    const similarGenres = this.anime.genres;
+    const type = this.anime.type;
+
+    this.service.getSimilarFilms(similarGenres, type).subscribe({
       next: (data: Film[]) => {
-        this.similar_content = data;
+        this.similar_content = data.slice(0, 4);
         this.loadingSimilar = false;
       },
       error: () => {
         this.loadingSimilar = false;
+        this.similar_content = [];
       }
     });
   }
 
   onTheNextPageS(item: Film): void {
+    this.anime = null;
+    this.similar_content = [];
+    this.loadingSimilar = false;
+    this.isFavorite = false;
+
     this.router.navigate([`anime/${item.id}`], {
       state: { anime: item }
     }).then(() => {
       window.scrollTo(0, 0);
-    }).then(() => {
-      window.location.reload();
+      this.loadAnimeData();
     });
+  }
+
+  onClickFavorite(anime: Film | null): void {
+    if (!anime?.id) return;
+
+    if (this.isFavorite) {
+      this.profileService.removeFromFavorites(anime.id, anime.type || 'anime').subscribe({
+        next: () => {
+          this.isFavorite = false;
+          localStorage.setItem(`fav_${anime.id}`, 'false');
+        },
+        error: (error) => {
+          console.error('Ошибка при удалении из избранного', error);
+        }
+      });
+    } else {
+      this.profileService.postFavorites(anime).subscribe({
+        next: () => {
+          this.isFavorite = true;
+          localStorage.setItem(`fav_${anime.id}`, 'true');
+        },
+        error: (error) => {
+          console.error('Ошибка при добавлении в избранное', error);
+        }
+      });
+    }
+  }
+
+  getRemainingSkeletons(): number[] {
+    const remaining = 4 - this.similar_content.length;
+    return remaining > 0 ? Array(remaining).fill(0).map((x, i) => i) : [];
   }
 }

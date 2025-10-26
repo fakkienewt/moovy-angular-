@@ -1,4 +1,5 @@
-<div class="signup-page">
+<div *ngIf="!isAuthenticated && !isLoading"
+    class="signup-page">
     <div class="signup-container">
         <div class="signup-header">
             <h1 class="signup-title">Create Account</h1>
@@ -67,3 +68,4 @@
         </form>
     </div>
 </div>
+

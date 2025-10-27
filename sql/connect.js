@@ -10,22 +10,6 @@ const options = {
 function initDatabase() {
     let connection = mysql.createConnection(options);
 
-    let movies = `
-        CREATE TABLE IF NOT EXISTS movies(
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        title VARCHAR(255) NOT NULL,
-        poster VARCHAR(500),
-        rating DECIMAL(3, 1) DEFAULT 0, 
-        year INT,              
-        description TEXT, 
-        genres TEXT,
-        countries TEXT,
-        director TEXT,
-        actors TEXT,
-        author TEXT, 
-        type TEXT
-    )`;
-
     let films = `
         CREATE TABLE IF NOT EXISTS films(
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -123,11 +107,6 @@ function initDatabase() {
     connection.query(users, function (err, results) {
         if (err) console.log(err);
         else console.log('таблица users создана');
-    });
-
-    connection.query(movies, function (err, results) {
-        if (err) console.log(err);
-        else console.log("таблица movies создана");
     });
 
     connection.query(films, function (err, results) {
@@ -273,38 +252,6 @@ async function saveDorama(doramaData) {
     console.log(`добавлено ${doramaData.length} дорам`);
 }
 
-async function saveMovie(movieData) {
-    let connection = mysql.createConnection(options);
-    for (let movie of movieData) {
-        const query = `
-        INSERT INTO movies(title, poster, rating, year, description, genres, author, actors, countries, director, type)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-        const values = [
-            movie.title,
-            movie.poster,
-            movie.rating,
-            movie.year,
-            movie.description,
-            Array.isArray(movie.genres) ? movie.genres.join(', ') : movie.genres,
-            Array.isArray(movie.author) ? movie.author.join(', ') : movie.author,
-            Array.isArray(movie.actors) ? movie.actors.join(', ') : movie.actors,
-            Array.isArray(movie.countries) ? movie.countries.join(', ') : movie.countries,
-            Array.isArray(movie.director) ? movie.director.join(', ') : movie.director,
-            movie.type
-        ];
-
-        connection.execute(query, values, function (error, results) {
-            if (error) {
-                console.log(error);
-                console.log(movieData);
-            }
-        });
-    }
-    connection.end();
-    console.log(`добавлено ${movieData.length} новых фильмов`);
-}
-
 async function deleteDoramaDublicates() {
     let connection = mysql.createConnection(options);
 
@@ -367,7 +314,6 @@ async function deleteAnimeDublicates() {
 initDatabase();
 module.exports = {
     initDatabase,
-    saveMovie,
     saveDorama,
     saveSerie,
     saveAnime,

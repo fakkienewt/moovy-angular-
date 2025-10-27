@@ -24,7 +24,7 @@ export class Series implements OnInit {
     public router: Router,
     private service: Service,
     private profileService: ProfileService,
-    public favoritesSync: FavoritesSyncService 
+    public favoritesSync: FavoritesSyncService
   ) { }
 
   ngOnInit(): void {
@@ -55,8 +55,6 @@ export class Series implements OnInit {
       this.loadSimilarSeries();
     } else {
       this.error = true;
-      console.error('No series data in navigation state');
-      console.log('Navigation state:', navigation);
     }
   }
 

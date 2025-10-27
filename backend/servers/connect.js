@@ -90,24 +90,6 @@ async function findDorama(page_dorama) {
     }
 }
 
-async function findMovie() {
-    let connection = await mysql.createConnection(options);
-    try {
-        const countOnPage = 15;
-        const offset = 30;
-        const query = `SELECT * FROM movies LIMIT ? OFFSET ?`;
-        const params = [countOnPage, offset];
-        const results = await fetchResults(connection, query, params);
-        return results;
-    } catch (error) {
-        console.log('ERROR:', error);
-    } finally {
-        if (connection) {
-            connection.end();
-        }
-    }
-}
-
 async function getFiltersData() {
     let connection = await mysql.createConnection(options);
     try {
@@ -283,7 +265,6 @@ module.exports = {
     findAnime,
     findFilm,
     findSerie,
-    findMovie,
     getFiltersData,
     getSearchData,
     getSimilarFilms

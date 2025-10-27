@@ -11,8 +11,6 @@ import { Profile } from './profile/profile/profile';
 const routes: Routes = [
   { path: '', component: Main },
 
-  { path: 'movie/:id', component: Films },
-
   { path: 'films/:id', component: Films },
 
   { path: 'series/:id', component: Series },

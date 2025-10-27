@@ -4,7 +4,6 @@ import { Film } from '../../models.ts/film.model';
 import { Favorites } from '../../models.ts/favorites.data.model';
 import { Router } from '@angular/router';
 import { FavoritesSyncService } from '../../services/favorites-sync-service';
-
 @Component({
   selector: 'app-profile',
   standalone: false,
@@ -17,6 +16,7 @@ export class Profile implements OnInit {
   userImage: string | null = null;
   userNickname: string = '';
   isLoading: boolean = false;
+
 
   activeTab: string = 'favorites';
 
@@ -36,6 +36,7 @@ export class Profile implements OnInit {
         break;
       case 'watched':
         console.log('watched');
+        // this.getWatchLater();
         break;
       case 'watchLater':
         console.log('watchLater');
@@ -48,7 +49,7 @@ export class Profile implements OnInit {
   ngOnInit(): void {
     this.getFavorites();
   }
-
+  
   getFavorites(): void {
     this.isLoading = true;
     this.profileService.getFavorites().subscribe({

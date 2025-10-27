@@ -32,7 +32,7 @@
                 </div>
                 <div *ngIf="!loading"
                     class="content-container">
-                    <div *ngFor="let movie of moviesList$ | async"
+                    <div *ngFor="let movie of movies"
                         class="movie-card-vertical">
                         <div class="poster-wrapper"
                             (click)="onClickPage(movie)">

@@ -31,19 +31,6 @@ function query(sql, params = []) {
     });
 }
 
-app.get('/api/movies', async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const countOnPage = 20;
-        const offset = countOnPage * (page - 1);
-
-        const movie = await query('SELECT * FROM movies LIMIT ? OFFSET ?', [countOnPage, offset]);
-        res.json(movie);
-    } catch (error) {
-        res.status(500).json({ error: 'ERRORR' });
-    }
-});
-
 app.get('/api/films', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;

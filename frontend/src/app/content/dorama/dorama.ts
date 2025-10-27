@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Film } from '../../models.ts/film.model';
 import { Service } from '../../services/service';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { FavoritesSyncService } from '../../services/favorites-sync-service';
   templateUrl: './dorama.html',
   styleUrl: './dorama.scss'
 })
-export class Dorama implements OnInit, OnDestroy {
+export class Dorama implements OnInit {
 
   error: boolean = false;
   dorama: Film | null = null;
@@ -21,29 +21,22 @@ export class Dorama implements OnInit, OnDestroy {
 
   isFavorite: boolean = false;
 
-  private popStateListener: () => void;
-
   constructor(
     public router: Router,
     private service: Service,
     private profileService: ProfileService,
-    private favoritesSync: FavoritesSyncService 
-  ) {
-    this.popStateListener = () => {
+    private favoritesSync: FavoritesSyncService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadDoramaData();
+
+    window.addEventListener('popstate', () => {
       setTimeout(() => {
         this.loadDoramaData();
         window.scrollTo(0, 0);
       }, 100);
-    };
-  }
-
-  ngOnInit(): void {
-    this.loadDoramaData();
-    window.addEventListener('popstate', this.popStateListener);
-  }
-
-  ngOnDestroy(): void {
-    window.removeEventListener('popstate', this.popStateListener);
+    });
   }
 
   loadDoramaData(): void {
@@ -56,7 +49,7 @@ export class Dorama implements OnInit, OnDestroy {
 
     if (this.dorama) {
       if (this.favoritesSync.getAndResetFavoritesChanged()) {
-        this.checkIfFavoriteForce(); 
+        this.checkIfFavoriteForce();
       } else {
         this.checkIfFavorite();
       }
@@ -103,11 +96,9 @@ export class Dorama implements OnInit, OnDestroy {
   }
 
   loadSimilarDorama(): void {
-    if (!this.dorama) return;
-
     this.loadingSimilar = true;
-    const similarGenres = this.dorama.genres;
-    const type = this.dorama.type;
+    const similarGenres = this.dorama?.genres;
+    const type = this.dorama?.type;
 
     this.service.getSimilarFilms(similarGenres, type).subscribe({
       next: (data: Film[]) => {
@@ -116,7 +107,6 @@ export class Dorama implements OnInit, OnDestroy {
       },
       error: () => {
         this.loadingSimilar = false;
-        this.similar_content = [];
       }
     });
   }

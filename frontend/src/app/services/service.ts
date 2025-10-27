@@ -15,12 +15,32 @@ export class Service {
   public current_page: number = 1;
   public filter_year: number;
 
+  public new_film_page: number = 1;
+  public all_new_films: Film[] = [];
+  private current_start_index: number = 0;
+
   backPage(): void {
     if (this.current_page === 1) {
       return;
     } else {
       this.current_page--;
     }
+  }
+
+  nextNewFilmPage(): void {
+    if (this.current_start_index + 4 < this.all_new_films.length) {
+      this.current_start_index++;
+    }
+  }
+
+  backNewFilmPage(): void {
+    if (this.current_start_index > 0) {
+      this.current_start_index--;
+    }
+  }
+
+  getCurrentFilms(): Film[] {
+    return this.all_new_films.slice(this.current_start_index, this.current_start_index + 4);
   }
 
   resetPage(): void {
@@ -37,8 +57,8 @@ export class Service {
     }
   }
 
-  getNewMovies(): Observable<Film[]> {
-    return this.http.get<Film[]>(`${this.baseUrl}/movies`);
+  getNewFilms(): Observable<Film[]> {  
+    return this.http.get<Film[]>(`${this.baseUrl}/films?page=${this.new_film_page}`);
   }
 
   getFilms(): Observable<Film[]> {

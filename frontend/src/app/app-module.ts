@@ -10,7 +10,6 @@ import { Dorama } from './content/dorama/dorama';
 import { Films } from './content/films/films';
 import { Series } from './content/series/series';
 import { MainPagination } from './paginations/main-pagination/main-pagination';
-import { NewFilmsService } from './services/new-films-service';
 import { Service } from './services/service';
 import { NewFilms } from './basic/new-films/new-films';
 import { CommonModule } from '@angular/common';
@@ -25,6 +24,7 @@ import { FooterService } from './services/footer.service';
 import { HeaderService } from './services/header.service';
 import { ProfileService } from './services/profile.service';
 import { FavoritesSyncService } from './services/favorites-sync-service';
+import { ProfilePagination } from './paginations/profile-pagination/profile-pagination';
 
 @NgModule({
   declarations: [
@@ -42,6 +42,7 @@ import { FavoritesSyncService } from './services/favorites-sync-service';
     FilterPagination,
     Profile,
     SignUp,
+    ProfilePagination,
   ],
   imports: [
     CommonModule,
@@ -52,7 +53,6 @@ import { FavoritesSyncService } from './services/favorites-sync-service';
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
-    NewFilmsService,
     Service,
     FooterService, 
     HeaderService, 

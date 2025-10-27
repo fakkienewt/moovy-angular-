@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Film } from '../../models.ts/film.model';
 import { Service } from '../../services/service';
@@ -11,9 +11,9 @@ import { FavoritesSyncService } from '../../services/favorites-sync-service';
   templateUrl: './anime.html',
   styleUrl: './anime.scss'
 })
-export class Anime implements OnInit, OnDestroy {
+export class Anime implements OnInit {
 
-  anime: Film | null = null;
+  anime: Film | null = null
   error = false;
 
   similar_content: Film[] = [];
@@ -21,29 +21,22 @@ export class Anime implements OnInit, OnDestroy {
 
   isFavorite: boolean = false;
 
-  private popStateListener: () => void;
-
   constructor(
     public router: Router,
     private service: Service,
     private profileService: ProfileService,
     private favoritesSync: FavoritesSyncService
-  ) {
-    this.popStateListener = () => {
+  ) { }
+
+  ngOnInit(): void {
+    this.loadAnimeData();
+
+    window.addEventListener('popstate', () => {
       setTimeout(() => {
         this.loadAnimeData();
         window.scrollTo(0, 0);
       }, 100);
-    };
-  }
-
-  ngOnInit(): void {
-    this.loadAnimeData();
-    window.addEventListener('popstate', this.popStateListener);
-  }
-
-  ngOnDestroy(): void {
-    window.removeEventListener('popstate', this.popStateListener);
+    });
   }
 
   loadAnimeData(): void {
@@ -104,11 +97,9 @@ export class Anime implements OnInit, OnDestroy {
   }
 
   loadSimilarAnime(): void {
-    if (!this.anime) return;
-
     this.loadingSimilar = true;
-    const similarGenres = this.anime.genres;
-    const type = this.anime.type;
+    const similarGenres = this.anime?.genres;
+    const type = this.anime?.type;
 
     this.service.getSimilarFilms(similarGenres, type).subscribe({
       next: (data: Film[]) => {
@@ -117,7 +108,6 @@ export class Anime implements OnInit, OnDestroy {
       },
       error: () => {
         this.loadingSimilar = false;
-        this.similar_content = [];
       }
     });
   }

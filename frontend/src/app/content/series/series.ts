@@ -18,6 +18,8 @@ export class Series implements OnInit {
 
   similar_content: Film[] = [];
   loadingSimilar: boolean = false;
+
+  isLater: boolean = false;
   isFavorite: boolean = false;
 
   constructor(
@@ -52,9 +54,50 @@ export class Series implements OnInit {
       } else {
         this.checkIfFavorite();
       }
+
+      if (this.favoritesSync.getAndResetLaterChanged()) {
+        this.checkIfLaterForce();
+      } else {
+        this.checkIfLater();
+      }
+
       this.loadSimilarSeries();
     } else {
       this.error = true;
+    }
+  }
+
+  checkIfLaterForce(): void {
+    if (!this.series?.id) return;
+
+    this.profileService.getLater().subscribe({
+      next: (response: any) => {
+        const later = response.data || [];
+        this.isLater = later.some((item: any) =>
+          (item.content_id === this.series?.id || item.id === this.series?.id)
+        );
+        localStorage.setItem(`later_${this.series!.id}`, this.isLater.toString());
+      },
+      error: () => this.isLater = false
+    });
+  }
+
+  checkIfLater(): void {
+    if (!this.series?.id) return;
+    const savedLater = localStorage.getItem(`later_${this.series.id}`);
+    if (savedLater) {
+      this.isLater = savedLater === 'true';
+    } else {
+      this.profileService.getLater().subscribe({
+        next: (response: any) => {
+          const later = response.data || [];
+          this.isLater = later.some((item: any) =>
+            (item.content_id === this.series?.id || item.id === this.series?.id)
+          );
+          localStorage.setItem(`later_${this.series!.id}`, this.isLater.toString());
+        },
+        error: () => this.isLater = false
+      });
     }
   }
 
@@ -63,8 +106,10 @@ export class Series implements OnInit {
 
     this.profileService.getFavorites().subscribe({
       next: (response: any) => {
-        const favorites = response.data || response.favorites || [];
-        this.isFavorite = favorites.some((fav: Film) => fav.id === this.series?.id);
+        const favorites = response.data || [];
+        this.isFavorite = favorites.some((fav: any) =>
+          (fav.content_id === this.series?.id || fav.id === this.series?.id)
+        );
         localStorage.setItem(`fav_${this.series!.id}`, this.isFavorite.toString());
       },
       error: () => this.isFavorite = false
@@ -153,5 +198,38 @@ export class Series implements OnInit {
   getRemainingSkeletons(): number[] {
     const remaining = 4 - this.similar_content.length;
     return remaining > 0 ? Array(remaining).fill(0).map((x, i) => i) : [];
+  }
+
+  onClickLater(serie: Film | null): void {
+    if (!serie?.id) return;
+
+    if (this.isLater) {
+      this.profileService.removeFromLater(serie.id, serie.type || 'serie').subscribe({
+        next: () => {
+          this.isLater = false;
+          localStorage.setItem(`later_${serie.id}`, 'false');
+          this.favoritesSync.markLaterChanged();
+        },
+        error: (error) => {
+          console.error('Ошибка при удалении из "Посмотреть позже"', error);
+        }
+      });
+    } else {
+      this.profileService.postLater(serie).subscribe({
+        next: () => {
+          this.isLater = true;
+          localStorage.setItem(`later_${serie.id}`, 'true');
+          this.favoritesSync.markLaterChanged();
+        },
+        error: (error) => {
+          if (error.status === 400 && error.error?.message?.includes('Уже в списке')) {
+            this.isLater = true;
+            localStorage.setItem(`later_${serie.id}`, 'true');
+          } else {
+            console.error('Ошибка при добавлении в "Посмотреть позже"', error);
+          }
+        }
+      });
+    }
   }
 }

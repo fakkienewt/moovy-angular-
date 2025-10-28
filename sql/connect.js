@@ -93,16 +93,33 @@ function initDatabase() {
         id INT PRIMARY KEY AUTO_INCREMENT,
         user_id INT NOT NULL,
         content_id INT NOT NULL,
-        content_type ENUM('film', 'serie', 'anime', 'dorama', 'movie') NOT NULL,
+        content_type ENUM('film', 'serie', 'anime', 'dorama') NOT NULL,
         added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         UNIQUE KEY unique_user_content (user_id, content_id, content_type)
-    )`
+    )`;
+
+    let later = `
+        CREATE TABLE IF NOT EXISTS later (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id INT NOT NULL,
+        content_id INT NOT NULL,
+        content_type ENUM('film', 'serie', 'anime', 'dorama') NOT NULL,
+        added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        UNIQUE KEY unique_user_content (user_id, content_id, content_type)
+    )`;
+
+    connection.query(later, function (err, results) {
+        if (err) console.log(err);
+        else console.log('таблица later создана');
+    });
 
     connection.query(favorites, function (err, results) {
         if (err) console.log(err);
         else console.log('таблица favorites создана');
     });
+
 
     connection.query(users, function (err, results) {
         if (err) console.log(err);

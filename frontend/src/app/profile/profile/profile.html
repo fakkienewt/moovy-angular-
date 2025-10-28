@@ -19,7 +19,7 @@
                 <div class="avatar-wrapper">
                     <div class="avatar-image">
                         <div *ngIf="!userImage"
-                            class="avatar-placeholder">А</div>
+                            class="avatar-placeholder">Г</div>
                     </div>
                 </div>
                 <div class="user-details">
@@ -30,7 +30,7 @@
                             <div class="stat-label">Избранное</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">0</div>
+                            <div class="stat-number">{{ watchLater.length }}</div>
                             <div class="stat-label">Смотреть позже</div>
                         </div>
                         <div class="stat-item">
@@ -173,43 +173,77 @@
                     </div>
                 </ng-container>
             </div>
+            <!-- //later -->
             <div class="tab-panel"
                 *ngIf="activeTab === 'watchLater'">
-                <div *ngIf="isLoading"
-                    class="cute-vertical-movies">
-                    <div class="vertical-grid">
-                        <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
-                            class="movie-card-vertical empty">
-                            <div class="poster-wrapper">
-                                <div class="empty-poster"></div>
-                            </div>
-                            <div class="movie-info">
-                                <div class="empty-title"></div>
-                                <div class="empty-year"></div>
+                <ng-container *ngIf="isLoading">
+                    <div class="cute-vertical-movies">
+                        <div class="vertical-grid">
+                            <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+                                class="movie-card-vertical empty">
+                                <div class="poster-wrapper">
+                                    <div class="empty-poster"></div>
+                                </div>
+                                <div class="movie-info">
+                                    <div class="empty-title"></div>
+                                    <div class="empty-year"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div *ngIf="!isLoading"
-                    class="empty-state">
-                    <div class="empty-icon">
-                        <svg width="56"
-                            height="56"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <path
-                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                stroke="#ffd1dc"
-                                stroke-width="2" />
-                            <path d="M12 6V12L16 14"
-                                stroke="#ffd1dc"
-                                stroke-width="2"
-                                stroke-linecap="round" />
-                        </svg>
+                </ng-container>
+                <ng-container *ngIf="!isLoading">
+                    <div *ngIf="watchLater.length > 0"
+                        class="cute-vertical-movies">
+                        <div class="vertical-grid">
+                            <div *ngFor="let film of watchLater"
+                                class="movie-card-vertical"
+                                (click)="onClickPage(film)">
+                                <div class="poster-wrapper">
+                                    <img [src]="getPosterUrl(film.poster)"
+                                        [alt]="film.title"
+                                        class="poster-image">
+                                    <button class="btn-remove-favorite"
+                                        (click)="$event.stopPropagation(); onClickDeleteFromLater(film)">
+                                        <svg width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none">
+                                            <path
+                                                d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </button>
+                                    <div class="movie-rating">{{ film.rating || '—' }}</div>
+                                </div>
+                                <div class="movie-info">
+                                    <h3 class="movie-title">{{ film.title }}</h3>
+                                    <p class="movie-year">{{ film.year }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="empty-title">Список пуст</h3>
-                    <p class="empty-text">Фильмы, которые вы отложите на потом, появятся здесь</p>
-                </div>
+                    <div *ngIf="watchLater.length === 0"
+                        class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="56"
+                                height="56"
+                                viewBox="0 0 24 24"
+                                fill="none">
+                                <path
+                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                    stroke="#ffd1dc"
+                                    stroke-width="2" />
+                                <path d="M12 6V12L16 14"
+                                    stroke="#ffd1dc"
+                                    stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-title">Список пуст</h3>
+                        <p class="empty-text">Фильмы, которые вы отложите на потом, появятся здесь</p>
+                    </div>
+                </ng-container>
             </div>
             <div class="tab-panel"
                 *ngIf="activeTab === 'watched'">

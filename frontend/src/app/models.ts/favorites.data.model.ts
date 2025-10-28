@@ -4,5 +4,6 @@ export class Favorites {
     success?: boolean;
     data?: Film[];
     favorites?: Film[];
+    watchlater?: Film[];
     message?: string;
 }

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
-import { Film } from '../../models.ts/film.model';
-import { Favorites } from '../../models.ts/favorites.data.model';
 import { Router } from '@angular/router';
 import { FavoritesSyncService } from '../../services/favorites-sync-service';
+
 @Component({
   selector: 'app-profile',
   standalone: false,
@@ -12,11 +11,12 @@ import { FavoritesSyncService } from '../../services/favorites-sync-service';
 })
 export class Profile implements OnInit {
 
-  favorites: Film[] = [];
+  favorites: any[] = [];
+  watchLater: any[] = [];
+
   userImage: string | null = null;
   userNickname: string = '';
   isLoading: boolean = false;
-
 
   activeTab: string = 'favorites';
 
@@ -31,38 +31,34 @@ export class Profile implements OnInit {
 
     switch (category) {
       case 'favorites':
-        console.log('favorites');
         this.getFavorites();
         break;
       case 'watched':
         console.log('watched');
-        // this.getWatchLater();
         break;
       case 'watchLater':
-        console.log('watchLater');
+        this.getWatchLater();
         break;
       case 'comments':
         console.log('comments');
         break;
     }
   }
+
   ngOnInit(): void {
     this.getFavorites();
   }
-  
+
   getFavorites(): void {
     this.isLoading = true;
     this.profileService.getFavorites().subscribe({
-      next: (response: Favorites | Film[]) => {
-        if (Array.isArray(response)) {
-          this.favorites = response;
-        } else if (response && 'data' in response && Array.isArray(response.data)) {
+      next: (response: any) => {
+        if (response && response.data) {
           this.favorites = response.data;
-        } else if (response && 'favorites' in response && Array.isArray(response.favorites)) {
+        } else if (response && response.favorites) {
           this.favorites = response.favorites;
         } else {
           this.favorites = [];
-          console.warn('Неизвестный формат ответа:', response);
         }
         this.isLoading = false;
         console.log('Избранное:', this.favorites);
@@ -70,6 +66,28 @@ export class Profile implements OnInit {
       error: (error) => {
         console.error('Ошибка при получении избранного:', error);
         this.favorites = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getWatchLater(): void {
+    this.isLoading = true;
+    this.profileService.getLater().subscribe({
+      next: (response: any) => {
+        if (response && response.data) {
+          this.watchLater = response.data;
+        } else if (response && response.watchlater) {
+          this.watchLater = response.watchlater;
+        } else {
+          this.watchLater = [];
+        }
+        this.isLoading = false;
+        console.log('Смотреть позже:', this.watchLater);
+      },
+      error: (error) => {
+        console.error('Ошибка при получении "Смотреть позже":', error);
+        this.watchLater = [];
         this.isLoading = false;
       }
     });
@@ -83,25 +101,28 @@ export class Profile implements OnInit {
   onClickPage(film: any): void {
     console.log('Кликнули на фильм:', film);
 
-    this.profileService.getFilmById(film.content_id, film.content_type).subscribe({
+    const contentId = film.content_id || film.id;
+    const contentType = film.content_type || film.type;
+
+    this.profileService.getFilmById(contentId, contentType).subscribe({
       next: (response: any) => {
         if (response.success) {
           const fullFilmData = response.data;
 
           let routePath = '';
 
-          switch (film.content_type) {
+          switch (contentType) {
             case 'film':
-              routePath = `films/${film.content_id}`;
+              routePath = `films/${contentId}`;
               break;
             case 'serie':
-              routePath = `series/${film.content_id}`;
+              routePath = `series/${contentId}`;
               break;
             case 'anime':
-              routePath = `anime/${film.content_id}`;
+              routePath = `anime/${contentId}`;
               break;
             case 'dorama':
-              routePath = `dorama/${film.content_id}`;
+              routePath = `dorama/${contentId}`;
               break;
           }
 
@@ -124,24 +145,38 @@ export class Profile implements OnInit {
   }
 
   onClickDelete(content: any): void {
-    const contentId = content.content_id;
-    const contentType = content.content_type;
+    const contentId = content.content_id || content.id;
+    const contentType = content.content_type || content.type;
 
     this.profileService.removeFromFavorites(contentId, contentType).subscribe({
       next: () => {
         this.favorites = this.favorites.filter(film =>
-          (film.id || film.id) !== contentId
+          film.content_id !== contentId && film.id !== contentId
         );
         this.favorites_sync_service.markFavoritesChanged();
-
         localStorage.setItem(`fav_${contentId}`, 'false');
-
-        this.getFavorites();
       },
       error: (error) => {
         console.error('Ошибка:', error);
       }
     });
   }
-}
 
+  onClickDeleteFromLater(content: any): void {
+    const contentId = content.content_id || content.id;
+    const contentType = content.content_type || content.type;
+
+    this.profileService.removeFromLater(contentId, contentType).subscribe({
+      next: () => {
+        this.watchLater = this.watchLater.filter(film =>
+          film.content_id !== contentId && film.id !== contentId
+        );
+        this.favorites_sync_service.markLaterChanged();
+        localStorage.setItem(`later_${contentId}`, 'false');
+      },
+      error: (error) => {
+        console.error('Ошибка при удалении из "Смотреть позже":', error);
+      }
+    });
+  }
+}

@@ -494,3 +494,20 @@
     height: 20px;
     object-fit: contain;
 }
+
+.btn-later.later svg {
+    color: #ff85a2;
+}
+
+.btn-later.later svg path {
+    stroke: #ff85a2;
+}
+
+.btn-later.later svg path:first-child {
+    fill: #ff85a2;
+    stroke: #ff85a2;
+}
+
+.btn-later.later svg path:last-child {
+    stroke: white;
+}

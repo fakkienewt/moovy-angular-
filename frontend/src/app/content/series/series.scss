@@ -530,3 +530,20 @@
     transform: scale(1.1);
     box-shadow: 0 6px 16px rgba(255, 133, 162, 0.6);
 }
+
+.btn-later.later svg {
+    color: #ff85a2;
+}
+
+.btn-later.later svg path {
+    stroke: #ff85a2;
+}
+
+.btn-later.later svg path:first-child {
+    fill: #ff85a2;
+    stroke: #ff85a2;
+}
+
+.btn-later.later svg path:last-child {
+    stroke: white;
+}

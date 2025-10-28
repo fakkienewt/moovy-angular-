@@ -93,4 +93,37 @@ export class ProfileService {
       }
     });
   }
+
+  postLater(content: any): Observable<any> {
+    const token = this.getToken();
+    return this.http.post(`${this.baseUrl}/later`, {
+      content: content
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
+
+  getLater(): Observable<Favorites> {
+    const token = this.getToken();
+    return this.http.get<Favorites>(`${this.baseUrl}/later`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
+
+  removeFromLater(contentId: number, contentType: string): Observable<any> {
+    const token = this.getToken();
+    return this.http.delete(`${this.baseUrl}/later`, {
+      params: {
+        contentId: contentId.toString(),
+        contentType
+      },
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
 }

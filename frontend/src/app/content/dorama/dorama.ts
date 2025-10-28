@@ -20,6 +20,7 @@ export class Dorama implements OnInit {
   loadingSimilar: boolean = false;
 
   isFavorite: boolean = false;
+  isLater: boolean = false;
 
   constructor(
     public router: Router,
@@ -53,9 +54,50 @@ export class Dorama implements OnInit {
       } else {
         this.checkIfFavorite();
       }
+
+      if (this.favoritesSync.getAndResetLaterChanged()) {
+        this.checkIfLaterForce();
+      } else {
+        this.checkIfLater();
+      }
+
       this.loadSimilarDorama();
     } else {
       this.error = true;
+    }
+  }
+
+  checkIfLaterForce(): void {
+    if (!this.dorama?.id) return;
+
+    this.profileService.getLater().subscribe({
+      next: (response: any) => {
+        const later = response.data || [];
+        this.isLater = later.some((item: any) =>
+          (item.content_id === this.dorama?.id || item.id === this.dorama?.id)
+        );
+        localStorage.setItem(`later_${this.dorama!.id}`, this.isLater.toString());
+      },
+      error: () => this.isLater = false
+    });
+  }
+
+  checkIfLater(): void {
+    if (!this.dorama?.id) return;
+    const savedLater = localStorage.getItem(`later_${this.dorama.id}`);
+    if (savedLater) {
+      this.isLater = savedLater === 'true';
+    } else {
+      this.profileService.getLater().subscribe({
+        next: (response: any) => {
+          const later = response.data || [];
+          this.isLater = later.some((item: any) =>
+            (item.content_id === this.dorama?.id || item.id === this.dorama?.id)
+          );
+          localStorage.setItem(`later_${this.dorama!.id}`, this.isLater.toString());
+        },
+        error: () => this.isLater = false
+      });
     }
   }
 
@@ -64,12 +106,48 @@ export class Dorama implements OnInit {
 
     this.profileService.getFavorites().subscribe({
       next: (response: any) => {
-        const favorites = response.data || response.favorites || [];
-        this.isFavorite = favorites.some((fav: Film) => fav.id === this.dorama?.id);
+        const favorites = response.data || [];
+        this.isFavorite = favorites.some((fav: any) =>
+          (fav.content_id === this.dorama?.id || fav.id === this.dorama?.id)
+        );
         localStorage.setItem(`fav_${this.dorama!.id}`, this.isFavorite.toString());
       },
       error: () => this.isFavorite = false
     });
+  }
+
+
+  onClickLater(dorama: Film | null): void {
+    if (!dorama?.id) return;
+
+    if (this.isLater) {
+      this.profileService.removeFromLater(dorama.id, dorama.type || 'dorama').subscribe({
+        next: () => {
+          this.isLater = false;
+          localStorage.setItem(`later_${dorama.id}`, 'false');
+          this.favoritesSync.markLaterChanged();
+        },
+        error: (error) => {
+          console.error('Ошибка при удалении из "Посмотреть позже"', error);
+        }
+      });
+    } else {
+      this.profileService.postLater(dorama).subscribe({
+        next: () => {
+          this.isLater = true;
+          localStorage.setItem(`later_${dorama.id}`, 'true');
+          this.favoritesSync.markLaterChanged();
+        },
+        error: (error) => {
+          if (error.status === 400 && error.error?.message?.includes('Уже в списке')) {
+            this.isLater = true;
+            localStorage.setItem(`later_${dorama.id}`, 'true');
+          } else {
+            console.error('Ошибка при добавлении в "Посмотреть позже"', error);
+          }
+        }
+      });
+    }
   }
 
   checkIfFavorite(): void {

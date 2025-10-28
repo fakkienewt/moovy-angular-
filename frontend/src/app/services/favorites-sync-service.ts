@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Film } from '../models.ts/film.model';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +6,7 @@ import { Film } from '../models.ts/film.model';
 export class FavoritesSyncService {
 
   private favoritesChanged = false;
+  private laterChanged = false;
 
   markFavoritesChanged() {
     this.favoritesChanged = true;
@@ -15,6 +15,16 @@ export class FavoritesSyncService {
   getAndResetFavoritesChanged(): boolean {
     const changed = this.favoritesChanged;
     this.favoritesChanged = false;
+    return changed;
+  }
+
+  markLaterChanged(): void {
+    this.laterChanged = true;
+  }
+
+  getAndResetLaterChanged(): boolean {
+    const changed = this.laterChanged;
+    this.laterChanged = false;
     return changed;
   }
 }

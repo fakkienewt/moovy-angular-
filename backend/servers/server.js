@@ -541,7 +541,7 @@ app.post('/api/postID', authenticateToken, async (req, res) => {
     if (type === 'film') {
         table = 'films';
     } else if (type === 'serie') {
-        table = 'series'; 
+        table = 'series';
     } else if (type === 'anime') {
         table = 'anime';
     } else if (type === 'dorama') {
@@ -576,6 +576,244 @@ app.post('/api/postID', authenticateToken, async (req, res) => {
     }
 });
 
+app.post('/api/favorites', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { content } = req.body;
+
+        if (!content || !content.id || !content.type) {
+            return res.status(400).json({
+                success: false,
+                message: 'Неверные данные контента'
+            });
+        }
+
+        let tableName;
+
+        switch (content.type) {
+            case 'film': tableName = 'films'; break;
+            case 'serie': tableName = 'series'; break;
+            case 'anime': tableName = 'anime'; break;
+            case 'dorama': tableName = 'dorama'; break;
+            default:
+                return res.status(400).json({
+                    success: false,
+                    message: 'Неверный тип контента'
+                });
+        }
+
+        const contentExists = await query(
+            `SELECT id FROM ${tableName} WHERE id = ?`,
+            [content.id]
+        );
+
+        if (contentExists.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Контент не найден'
+            });
+        }
+
+        const existingFavorite = await query(
+            'SELECT id FROM favorites WHERE user_id = ? AND content_id = ? AND content_type = ?',
+            [userId, content.id, content.type]
+        );
+
+        if (existingFavorite.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Уже в избранном'
+            });
+        }
+
+        await query(
+            'INSERT INTO favorites (user_id, content_id, content_type) VALUES (?, ?, ?)',
+            [userId, content.id, content.type]
+        );
+
+        res.json({
+            success: true,
+            message: 'Добавлено в избранное'
+        });
+
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({
+                success: false,
+                message: 'Уже в избранном'
+            });
+        }
+
+        console.log('Ошибка при добавлении в избранное:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+app.post('/api/later', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { content } = req.body;
+
+        if (!content || !content.id || !content.type) {
+            return res.status(400).json({
+                success: false,
+                message: 'Неверные данные контента'
+            });
+        }
+
+        let tableName;
+
+        switch (content.type) {
+            case 'film': tableName = 'films'; break;
+            case 'serie': tableName = 'series'; break;
+            case 'anime': tableName = 'anime'; break;
+            case 'dorama': tableName = 'dorama'; break;
+            default:
+                return res.status(400).json({
+                    success: false,
+                    message: 'Неверный тип контента'
+                });
+        }
+
+        const contentExists = await query(
+            `SELECT id FROM ${tableName} WHERE id = ?`,
+            [content.id]
+        );
+
+        if (contentExists.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Контент не найден'
+            });
+        }
+
+        const existingLater = await query(
+            'SELECT id FROM later WHERE user_id = ? AND content_id = ? AND content_type = ?',
+            [userId, content.id, content.type]
+        );
+
+        if (existingLater.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Уже в списке "Посмотреть позже"'
+            });
+        }
+
+        await query(
+            'INSERT INTO later (user_id, content_id, content_type) VALUES (?, ?, ?)',
+            [userId, content.id, content.type]
+        );
+
+        res.json({
+            success: true,
+            message: 'Добавлено в "Посмотреть позже"'
+        });
+
+    } catch (err) {
+        console.log('Ошибка при добавлении в "Посмотреть позже":', err);
+
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({
+                success: false,
+                message: 'Уже в списке "Посмотреть позже"'
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+app.get('/api/later', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { type } = req.query;
+
+        let sqlParts = [];
+        let params = [];
+
+        const contentTypes = [
+            { type: 'film', table: 'films' },
+            { type: 'serie', table: 'series' },
+            { type: 'anime', table: 'anime' },
+            { type: 'dorama', table: 'dorama' }
+        ];
+
+        contentTypes.forEach(({ type: contentType, table }) => {
+            if (!type || type === contentType) {
+                let partSql = `
+                   SELECT 
+                    later.id as favorite_id,
+                    later.added_at,
+                    later.content_type,
+                    later.content_id,
+                    ${table}.title,              
+                    ${table}.poster,                 
+                    ${table}.rating,
+                    ${table}.year,
+                    ${table}.genres,
+                    ${table}.countries,
+                    ${table}.description
+                    FROM later
+                    INNER JOIN ${table} ON later.content_id = ${table}.id AND later.content_type = '${contentType}'
+                    WHERE later.user_id = ?
+                `;
+                sqlParts.push(partSql);
+                params.push(userId);
+            }
+        });
+
+        if (sqlParts.length === 0) {
+            return res.json({
+                success: true,
+                data: []
+            });
+        }
+
+        const finalSql = sqlParts.join(' UNION ALL ') + ' ORDER BY added_at DESC';
+        const favorites = await query(finalSql, params);
+
+        res.json({
+            success: true,
+            data: favorites
+        });
+
+    } catch (err) {
+        console.error('Ошибка при получении избранного:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+app.delete('/api/later', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { contentId, contentType } = req.query;
+
+        await query(
+            'DELETE FROM later WHERE user_id = ? AND content_id = ? AND content_type = ?',
+            [userId, contentId, contentType]
+        );
+
+        res.json({
+            success: true,
+            message: 'Удалено из "Смотреть позже"'
+        });
+    } catch (err) {
+        console.error('Ошибка при удалении из "Смотреть позже":', err);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);

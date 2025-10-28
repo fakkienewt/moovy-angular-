@@ -2,7 +2,6 @@ const animeParser = require('./content/parse.anime');
 const filmParser = require('./content/parse.film');
 const serieParser = require('./content/parse.series');
 const doramaParser = require('./content/parse.dorama');
-const movieParser = require('./content/parse.movie');
 const connect = require('./connect');
 
 async function fillDatabase() {
@@ -51,12 +50,6 @@ async function fillDatabase() {
             page_dorama++;
         }
         console.log('база данных с дорамами заполнена!');
-
-        console.log('ПАРСИМ НОВЫЕ ФИЛЬМЫ');
-        const movieData = await movieParser.parseMovies();
-        console.log('найдено новых фильмов:', movieData.length);
-        await connect.saveMovie(movieData);
-        console.log('база данных с новыми фильмами заполнена!');
 
         console.log('УДАЛЯЕМ ДУБЛИКАТЫ ДОРАМ...');
         await connect.deleteDoramaDublicates();

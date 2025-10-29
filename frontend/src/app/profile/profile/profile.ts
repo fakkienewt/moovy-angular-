@@ -20,29 +20,59 @@ export class Profile implements OnInit {
 
   activeTab: string = 'favorites';
 
+  currentPage: number = 1;
+  total_items: number = 12;
+
   constructor(
     private profileService: ProfileService,
     public router: Router,
     public favorites_sync_service: FavoritesSyncService
   ) { }
 
+  getPaginatedFavorites(): any[] {
+    const start = (this.currentPage - 1) * this.total_items;
+    const end = start + this.total_items;
+    return this.favorites.slice(start, end);
+  }
+
+  getPaginatedWatchLater(): any[] {
+    const start = (this.currentPage - 1) * this.total_items;
+    const end = start + this.total_items;
+    return this.watchLater.slice(start, end);
+  }
+
+  getTotalPages(): number {
+    if (this.activeTab === 'favorites') {
+      return this.favorites.length / this.total_items;
+    } else if (this.activeTab === 'watchLater') {
+      return this.watchLater.length / this.total_items;
+    }
+    return 1;
+  }
+
   loadCategoryData(category: string): void {
     this.activeTab = category;
 
     switch (category) {
       case 'favorites':
+        this.currentPage = 1;
         this.getFavorites();
         break;
       case 'watched':
         console.log('watched');
         break;
       case 'watchLater':
+        this.currentPage = 1;
         this.getWatchLater();
         break;
       case 'comments':
         console.log('comments');
         break;
     }
+  }
+
+  onChangedPage(page: number): void {
+    this.currentPage = page;
   }
 
   ngOnInit(): void {

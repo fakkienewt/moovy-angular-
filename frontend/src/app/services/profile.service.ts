@@ -2,11 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Favorites } from '../models.ts/favorites.data.model';
+import { Film } from '../models.ts/film.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
+
+  public current_page: number = 1;
 
   constructor(private http: HttpClient) { }
 

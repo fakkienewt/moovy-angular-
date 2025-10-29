@@ -69,11 +69,13 @@
                     <path
                         d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
                         stroke="currentColor"
-                        stroke-width="2" />
+                        stroke-width="2"
+                        fill="none" />
                     <path d="M12 6V12L16 14"
                         stroke="currentColor"
                         stroke-width="2"
-                        stroke-linecap="round" />
+                        stroke-linecap="round"
+                        fill="none" />
                 </svg>
                 Смотреть позже
             </div>
@@ -129,7 +131,7 @@
                     <div *ngIf="favorites.length > 0"
                         class="cute-vertical-movies">
                         <div class="vertical-grid">
-                            <div *ngFor="let film of favorites"
+                            <div *ngFor="let film of getPaginatedFavorites()"
                                 class="movie-card-vertical"
                                 (click)="onClickPage(film)">
                                 <div class="poster-wrapper">
@@ -155,6 +157,11 @@
                                 </div>
                             </div>
                         </div>
+                        <app-profile-pagination *ngIf="getPaginatedFavorites()"
+                            [currentPage]="currentPage"
+                            [totalPages]="getTotalPages()"
+                            (changedPage)="onChangedPage($event)">
+                        </app-profile-pagination>
                     </div>
                     <div *ngIf="favorites.length === 0"
                         class="empty-state">
@@ -173,7 +180,6 @@
                     </div>
                 </ng-container>
             </div>
-            <!-- //later -->
             <div class="tab-panel"
                 *ngIf="activeTab === 'watchLater'">
                 <ng-container *ngIf="isLoading">
@@ -196,7 +202,7 @@
                     <div *ngIf="watchLater.length > 0"
                         class="cute-vertical-movies">
                         <div class="vertical-grid">
-                            <div *ngFor="let film of watchLater"
+                            <div *ngFor="let film of getPaginatedWatchLater()"
                                 class="movie-card-vertical"
                                 (click)="onClickPage(film)">
                                 <div class="poster-wrapper">
@@ -222,6 +228,11 @@
                                 </div>
                             </div>
                         </div>
+                        <app-profile-pagination *ngIf="getPaginatedFavorites()"
+                            [currentPage]="currentPage"
+                            [totalPages]="getTotalPages()"
+                            (changedPage)="onChangedPage($event)">
+                        </app-profile-pagination>
                     </div>
                     <div *ngIf="watchLater.length === 0"
                         class="empty-state">
